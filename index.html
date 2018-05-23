@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <title>智慧教育示范应用</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="./css/base.css" type="text/css">
+    <!-- Font Awesome -->
+    <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Ionicons -->
+    <link href="http://cdn.bootcss.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="./dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="./dist/css/skins/_all-skins.min.css">
+
+    <style>
+        path, line {
+            stroke: #777;
+        }
+
+        text {
+            font-family: Microsoft YaHei;
+        }
+        .leafMessage{
+            /*width:300px;*/
+            height:250px;
+            overflow:scroll;
+        }
+    </style>
+
+    <link rel="stylesheet" href="./plugins/jQuery/jquery.qtip.css"/>
+    <script src="./plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="./plugins/angularjs/angular.min.js"></script>
+    <script src="./plugins/d3js/d3.js" charset="utf-8"></script>
+    <script src="./plugins/datguijs/dat.gui.min.js"></script>
+    <script src="./plugins/jQuery/jquery.qtip.js"></script>
+    <script src="./plugins/jQuery/jquery-ui.js"></script>
+</head>
+<script src="./bootstrap/js/bootstrap.min.js"></script>
+<script src="./dist/js/app.min.js"></script>
+<script src="./plugins/echartjs/echarts.min-kg.js"></script>
+<script src="./plugins/dataTooljs/dataTool.js"></script>
+
+  <link rel="shortcut icon" href="./images/ico/forest3/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="128x128" href="./images/ico/forest3/forest_128.png">
+  <link rel="apple-touch-icon-precomposed" sizes="96x96" href="./images/ico/forest3/forest_96.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./images/ico/forest3/forest_72.png">
+  <link rel="apple-touch-icon-precomposed" href="./images/ico/forest3/forest_64.png">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                智慧教育示范应用
+                <small>课程：<a id="domainName"></a>
+                </small>
+            </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row" style="height:100px;">
+                <div class="col-md-2"  style="height:100%;overflow:hidden; position: relative;">
+                    <div class="box box-primary" style="height:80%;text-align:center;">
+                        <h4 style="display: inline-block; vertical-align: middle;">
+                            知识主题推荐学习
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="box box-primary" style="height:95%;overflow:hidden; position: relative;">
+                        <!-- 此处是推荐的一系列知识主题
+                    鼠标移动到主题自动显示分面学习状态 -->
+                    </div>
+                </div>
+                <div class="col-md-2"  style="height:95%;overflow:hidden; position: relative;">
+                    <div class="box box-primary">
+                        <!-- 此处是主题推荐方式的选择 -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 col-md-4">
+                        <!-- 此处是主题分面的信息 -->
+                        <div class="box box-primary box-solid" style="width:100%">
+                          <div class="box-header with-border">
+                            <h3 class="box-title" id="class_name">分面展示</h3>
+                          </div>
+                          <div id="facetClassDiv" class="box-body" style="display: block;overflow-y: auto">
+
+                            <ul class="" style="background-color: ">
+                              <li class=" list-group-item" ng-repeat="x in classInfo " style="margin-left: -10%;background-color: ">
+                                <div class=" list-group-item" style="background-color:#4682B4;">
+                                 <a id={{x.TermName}}_choose ng-click="gettopicfacet(x.ClassName,x.TermName);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);" ondrop="dropFacet1(event,this.id)" ondragover="allowDrop(event)" style="color:white;cursor:pointer">{{x.TermName}}</a>
+                                 <a id={{x.TermName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsed =!isCollapsed;" ng-hide="x.Facet1.length==0"></a>
+                               </div>
+                               <ul uib-collapse="isCollapsed" class="level2" ng-repeat="y in x.Facet1">
+                                <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
+                                 <a id={{x.TermName}}_{{y.Facet1Name}}_choose style="color:white;cursor:pointer"
+                                 ng-click="getfacet1facet(x.ClassName,x.TermName,y.Facet1Name);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);"  ondrop="dropFacet2(event,this.id)" ondragover="allowDrop(event)">{{y.Facet1Name}}</a>
+                                 <a id={{x.TermName}}_{{y.Facet1Name}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;" ng-hide="y.Facet2.length==0"></a>
+                               </div>
+
+                               <ul uib-collapse="isCollapsedchildren" class="level3"
+                               ng-repeat="z in y.Facet2">
+                               <div class="list-group-item " style="background-color: #6495ED;margin:2px 0;">
+                                 <a id={{x.TermName}}_{{y.Facet1Name}}_{{z.Facet2Name}}_choose style="color:white;cursor:pointer" ng-click="getfacet2facet(x.ClassName,x.TermName,y.Facet1Name,z.Facet2Name);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);" ondrop="dropFacet3(event,this.id)" ondragover="allowDrop(event)">{{z.Facet2Name}}</a>
+                                 <i class="fa fa-fw fa-chevron-left" style="float:right;color:white" id={{x.TermName}}_{{y.Facet1Name}}_{{z.Facet2Name}}_a ng-hide="z.Facet3.length==0"></i>
+                               </div>
+                             </ul>
+                           </ul>
+                         </li>
+                       </ul>
+                        </div>
+                    </div>
+                </div>
+                    
+                
+                <div class="col-xs-8 col-md-8">
+                    <div class="box box-primary">
+                        <!-- 此处是碎片信息 -->
+                        <div class="box">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Bordered Table</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                              <td>1.</td>
+                              <td>Update software</td>
+                              <td>
+                                <div class="progress progress-xs">
+                                  <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                </div>
+                              </td>
+                              <td><span class="badge bg-red">55%</span></td>
+                            </tr>
+                            <tr>
+                              <td>2.</td>
+                              <td>Clean database</td>
+                              <td>
+                                <div class="progress progress-xs">
+                                  <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                                </div>
+                              </td>
+                              <td><span class="badge bg-yellow">70%</span></td>
+                            </tr>
+                            <tr>
+                              <td>3.</td>
+                              <td>Cron job running</td>
+                              <td>
+                                <div class="progress progress-xs progress-striped active">
+                                  <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                                </div>
+                              </td>
+                              <td><span class="badge bg-light-blue">30%</span></td>
+                            </tr>
+                            <tr>
+                              <td>4.</td>
+                              <td>Fix and squish bugs</td>
+                              <td>
+                                <div class="progress progress-xs progress-striped active">
+                                  <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                                </div>
+                              </td>
+                              <td><span class="badge bg-green">90%</span></td>
+                            </tr>
+                          </tbody></table>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer clearfix">
+                          <ul class="pagination pagination-sm no-margin pull-right">
+                            <li><a href="#">«</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">»</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.0.1
+        </div>
+        <!-- <strong>Copyright &copy; 2017 智能网络与网络安全教育部重点实验室.</strong> All rights reserved. -->
+        <strong>Copyright &copy; 2018 大数据算法与分析技术国家工程实验室.</strong> All rights reserved.
+    </footer>
+
+
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+
+</body>
+</html>
