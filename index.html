@@ -36,22 +36,18 @@
 
     <link rel="stylesheet" href="./plugins/jQuery/jquery.qtip.css"/>
     <script src="./plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <script src="./plugins/angularjs/angular.min.js"></script>
     <script src="./plugins/d3js/d3.js" charset="utf-8"></script>
     <script src="./plugins/datguijs/dat.gui.min.js"></script>
     <script src="./plugins/jQuery/jquery.qtip.js"></script>
     <script src="./plugins/jQuery/jquery-ui.js"></script>
-</head>
-<script src="./bootstrap/js/bootstrap.min.js"></script>
-<script src="./dist/js/app.min.js"></script>
-<script src="./plugins/echartjs/echarts.min-kg.js"></script>
-<script src="./plugins/dataTooljs/dataTool.js"></script>
+    <script src="./plugins/angularjs/angular.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
 
-  <link rel="shortcut icon" href="./images/ico/forest3/favicon.ico">
-  <link rel="apple-touch-icon-precomposed" sizes="128x128" href="./images/ico/forest3/forest_128.png">
-  <link rel="apple-touch-icon-precomposed" sizes="96x96" href="./images/ico/forest3/forest_96.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./images/ico/forest3/forest_72.png">
-  <link rel="apple-touch-icon-precomposed" href="./images/ico/forest3/forest_64.png">
+    <link rel="shortcut icon" href="./images/ico/forest3/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="./images/ico/forest3/forest_128.png">
+    <link rel="apple-touch-icon-precomposed" sizes="96x96" href="./images/ico/forest3/forest_96.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./images/ico/forest3/forest_72.png">
+    <link rel="apple-touch-icon-precomposed" href="./images/ico/forest3/forest_64.png">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -75,20 +71,41 @@
         </section>
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content"  ng-app="app" ng-controller="yangkuanController">
 
             <div class="row" style="height:100px;">
-                <div class="col-md-2"  style="height:100%;overflow:hidden; position: relative;">
+                <div class="col-md-2"  style="">
                     <div class="box box-primary" style="height:80%;text-align:center;">
+                      <div class="box-body">
                         <h4 style="display: inline-block; vertical-align: middle;">
                             知识主题推荐学习
                         </h4>
+                      </div>
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="box box-primary" style="height:95%;overflow:hidden; position: relative;">
+                    <div class="box box-primary" style="">
                         <!-- 此处是推荐的一系列知识主题
                     鼠标移动到主题自动显示分面学习状态 -->
+                      <div class="box box-solid">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">主题推荐</h3>
+                        </div>
+                        <div class="box-body" style="overflow-x: auto;">
+                            <table class="table">
+                              <tbody style="">
+                                <tr class="active">
+                                  <td ng-repeat="topic in topics">
+                                    <button type="button" class="btn btn-block btn-primary btn-lg" ng-click="getFacetsByDomainNameAndTopicNames(topic.domainName,topic.topicName);getAssemblesByDomainNameAndTopicNames(topic.domainName,topic.topicName);">{{topic.topicName}}</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                            
+                          </div>
+                      </div>
+
                     </div>
                 </div>
                 <div class="col-md-2"  style="height:95%;overflow:hidden; position: relative;">
@@ -97,35 +114,29 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-4 col-md-4">
+            <div class="row" style="height:100%;">
+                <div class="col-xs-4 col-md-4" style="height:100%;">
                         <!-- 此处是主题分面的信息 -->
-                        <div class="box box-primary box-solid" style="width:100%">
+                        <div class="box box-primary box-solid" style="width:100%;height:100%;">
                           <div class="box-header with-border">
                             <h3 class="box-title" id="class_name">分面展示</h3>
                           </div>
-                          <div id="facetClassDiv" class="box-body" style="display: block;overflow-y: auto">
+                          <div id="facetClassDiv" class="box-body" style="display: block;overflow:scroll;width: 100%;height:100%;">
 
-                            <ul class="" style="background-color: ">
-                              <li class=" list-group-item" ng-repeat="x in classInfo " style="margin-left: -10%;background-color: ">
+                            <ul class="" style="background-color: ;height:100%;">
+                              <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="margin-left: -10%;background-color: ">
                                 <div class=" list-group-item" style="background-color:#4682B4;">
-                                 <a id={{x.TermName}}_choose ng-click="gettopicfacet(x.ClassName,x.TermName);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);" ondrop="dropFacet1(event,this.id)" ondragover="allowDrop(event)" style="color:white;cursor:pointer">{{x.TermName}}</a>
-                                 <a id={{x.TermName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsed =!isCollapsed;" ng-hide="x.Facet1.length==0"></a>
+                                   <a id={{firstLayerFacet.facetName}}_choose ng-click="" ondrop="dropFacet1(event,this.id)" ondragover="allowDrop(event)" style="color:white;cursor:pointer">{{firstLayerFacet.facetName}}
+                                   </a>
+                                  <a id={{firstLayerFacet.facetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
+                                  </a>
                                </div>
-                               <ul uib-collapse="isCollapsed" class="level2" ng-repeat="y in x.Facet1">
+                               <ul uib-collapse="isCollapsed" class="level2" ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                                 <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
-                                 <a id={{x.TermName}}_{{y.Facet1Name}}_choose style="color:white;cursor:pointer"
-                                 ng-click="getfacet1facet(x.ClassName,x.TermName,y.Facet1Name);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);"  ondrop="dropFacet2(event,this.id)" ondragover="allowDrop(event)">{{y.Facet1Name}}</a>
-                                 <a id={{x.TermName}}_{{y.Facet1Name}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;" ng-hide="y.Facet2.length==0"></a>
+                                 <a id={{firstLayerFacet.facetName}}_{{secondLayerFacet.facetName}}_choose style="color:white;cursor:pointer"
+                                 ng-click=""  ondrop="dropFacet2(event,this.id)" ondragover="allowDrop(event)">{{secondLayerFacet.facetName}}</a>
+                                 <a id={{firstLayerFacet.facetName}}_{{secondLayerFacet.facetName}}__a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;" ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
                                </div>
-
-                               <ul uib-collapse="isCollapsedchildren" class="level3"
-                               ng-repeat="z in y.Facet2">
-                               <div class="list-group-item " style="background-color: #6495ED;margin:2px 0;">
-                                 <a id={{x.TermName}}_{{y.Facet1Name}}_{{z.Facet2Name}}_choose style="color:white;cursor:pointer" ng-click="getfacet2facet(x.ClassName,x.TermName,y.Facet1Name,z.Facet2Name);showFacetTreeWithoutLeaves(x.ClassName,x.TermName);" ondrop="dropFacet3(event,this.id)" ondragover="allowDrop(event)">{{z.Facet2Name}}</a>
-                                 <i class="fa fa-fw fa-chevron-left" style="float:right;color:white" id={{x.TermName}}_{{y.Facet1Name}}_{{z.Facet2Name}}_a ng-hide="z.Facet3.length==0"></i>
-                               </div>
-                             </ul>
                            </ul>
                          </li>
                        </ul>
@@ -136,68 +147,54 @@
                 
                 <div class="col-xs-8 col-md-8">
                     <div class="box box-primary">
-                        <!-- 此处是碎片信息 -->
-                        <div class="box">
-                        <div class="box-header with-border">
-                          <h3 class="box-title">Bordered Table</h3>
+                      <!-- 此处是碎片信息 -->
+                      <div class="callout callout-success">
+                        <h4>{{ assembleNumber }}</h4>
+                        <!-- <p>问题数量：</p> -->
+                      </div>
+
+                      <div class="box box-solid" ng-repeat="assemble in assembles">
+                      <!-- <div class="box box-solid box-primary" ng-repeat="fragment in fragments"> -->
+                      <!-- <div class="box box-solid box-success" ng-repeat="fragment in fragments"> -->
+                      <!-- <div class="box box-solid box-warning" ng-repeat="fragment in fragments"> -->
+
+                        <!-- 问题碎片的主题、分面和数据源信息 -->
+                        <div class="box-header with-border" id="q_{{ assemble.assembleId }}" >
+
+                          <!-- 问题碎片的主题、分面和数据源信息 -->
+                          <h1 class="box-title">
+                            <small>
+                              topic:
+                              <span class="badge bg-purple">
+                                <a style="color: white" target="_blank">{{ assemble.topicName }}</a>
+                              </span>
+                              &nbsp;&nbsp;&nbsp;
+                              source:
+                              <span class="badge bg-yellow">
+                                <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
+                              </span>
+
+                            </small>
+                          </h1>
+                          <div class="box-tools pull-right">
+                            <!-- 缩放按钮 -->
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip">
+                              <i class="fa fa-minus"></i>
+                            </button>
+                          </div>
                         </div>
-                        <!-- /.box-header -->
+
                         <div class="box-body">
-                          <table class="table table-bordered">
-                            <tbody>
-                            <tr>
-                              <td>1.</td>
-                              <td>Update software</td>
-                              <td>
-                                <div class="progress progress-xs">
-                                  <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                </div>
-                              </td>
-                              <td><span class="badge bg-red">55%</span></td>
-                            </tr>
-                            <tr>
-                              <td>2.</td>
-                              <td>Clean database</td>
-                              <td>
-                                <div class="progress progress-xs">
-                                  <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                                </div>
-                              </td>
-                              <td><span class="badge bg-yellow">70%</span></td>
-                            </tr>
-                            <tr>
-                              <td>3.</td>
-                              <td>Cron job running</td>
-                              <td>
-                                <div class="progress progress-xs progress-striped active">
-                                  <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                                </div>
-                              </td>
-                              <td><span class="badge bg-light-blue">30%</span></td>
-                            </tr>
-                            <tr>
-                              <td>4.</td>
-                              <td>Fix and squish bugs</td>
-                              <td>
-                                <div class="progress progress-xs progress-striped active">
-                                  <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                </div>
-                              </td>
-                              <td><span class="badge bg-green">90%</span></td>
-                            </tr>
-                          </tbody></table>
+
+                          <!-- 问题正文 -->
+                          <p class="text-black">
+                            {{ assemble.assembleText }}
+                            ...<a style="color: light-blue" href="question.html#q_body" ng-click='setFragmentCookie(fragment.question_id)'><span>(more)</span></a>
+                          </p>
                         </div>
                         <!-- /.box-body -->
-                        <div class="box-footer clearfix">
-                          <ul class="pagination pagination-sm no-margin pull-right">
-                            <li><a href="#">«</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">»</a></li>
-                          </ul>
-                        </div>
                       </div>
+                        
                     </div>
                 </div>
             </div>
@@ -221,6 +218,6 @@
 </div>
 <!-- ./wrapper -->
 
-
+<script language="javascript" type="text/javascript" src="./js/function.js"></script>
 </body>
 </html>
