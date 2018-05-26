@@ -34,3 +34,11 @@ span{
 	color: #252525;
 }
 
+.main-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
