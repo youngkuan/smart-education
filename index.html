@@ -87,8 +87,8 @@
                       </div>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="box box-primary" style="height: 100%;" >
+                <div class="col-md-8" style="height: 165px">
+                    <div class="box box-primary" style="height: 88%;" >
                         <!-- 此处是推荐的一系列知识主题
                     鼠标移动到主题自动显示分面学习状态 -->
                       <div class="box box-solid" style="padding-left: 4px;padding-right: 4px">
@@ -122,17 +122,13 @@
                           </div>
                           <div class="box-body" style="padding: 18px">
                             <div class="btn-group" >
-                              <button type="button" class="btn bg-purple btn-lg">主题推荐方式</button>
+                              <button type="button" class="btn bg-purple btn-lg">{{shownname}}</button>
                               <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                               </button>
                               <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                <li ng-repeat="x in recnames"><a href="#" ng-click="updateRecname(x)">{{x}}</a></li>
                               </ul>
                             </div>
                           </div>
@@ -149,8 +145,8 @@
                           </div>
                           <div id="facetClassDiv" class="box-body">
 
-                            <ul class="" style="display:block; overflow-y:auto; height:670px;">
-                              <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="margin-left: -10%;background-color: ">
+                            <ul class="" style="display:block; overflow-y:auto; height:600px;">
+                              <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="margin-left: -10%;background-color: white">
                                 <div class=" list-group-item" style="background-color:#4682B4;">
                                    <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                                    </a>
@@ -181,7 +177,7 @@
                         <!-- <p>问题数量：</p> -->
                       </div>
                     </div>
-                      <div style="overflow:auto; height:670px;">
+                      <div style="overflow:auto; height:600px;">
                         
                       <div class="box box-solid" ng-repeat="assemble in assembles">
                       <!-- <div class="box box-solid box-primary" ng-repeat="fragment in fragments"> -->
