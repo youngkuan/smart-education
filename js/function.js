@@ -1,5 +1,5 @@
 
-ip_yotta = "http://202.117.54.42:8082/yotta";
+ip_yotta = "http://202.117.54.42:8080/yotta";
 ip_gexinghua = "";
 domainName = "数据结构";
 topics = [];
