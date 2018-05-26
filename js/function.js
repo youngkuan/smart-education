@@ -1,12 +1,18 @@
 
-ip_yotta = "";
+ip_yotta = "http://202.117.54.42:8082/yotta";
 ip_gexinghua = "";
+domainName = "数据结构";
 topics = [];
+topicNames = "";
 facets = {};
 assembles = {};
 
+
+
 // angularjs控制
-var app = angular.module('app', []);
+var app=angular.module('app',[
+    'ui.bootstrap'
+]);
 app.controller('yangkuanController', function($scope, $http, $sce) {
 
 
@@ -15,57 +21,27 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
     $http({
         method: 'GET',
-        url: "http://localhost:8080/yotta/topic/getTopicsByDomainName?domainName=数据结构"
+        url: "http://202.117.54.42:8080/yotta/topic/getTopicsByDomainName?domainName=数据结构"
       }).then(function successCallback(response) {
           $scope.topics = response.data.data;
           topics = $scope.topics;
-          console.log($scope.topics);
+          for(var i=0;i<topics.length-1;i++){
+            topicNames = topicNames + topics[i]["topicName"] + ",";
+          }
+          topicNames = topicNames + topics[topics.length-1]["topicName"];
+          /**
+         * 页面加载时根据默认课程名及主题，查询推荐主题列表下所有分面
+         */
+          $scope.getFacetsByDomainNameAndTopicNames(domainName,topicNames);
+          /**
+         * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
+         */
+          $scope.getAssemblesByDomainNameAndTopicNames(domainName,topicNames);
+          $scope.isCollapsed = true;
+          $scope.isCollapsedchildren = true;
         }, function errorCallback(response) {
           // 请求失败执行代码
       });
-    /**
-     * 页面加载时根据默认课程名及主题，查询推荐主题列表下所有分面
-     */
-    $http({
-        url : ip_yotta + "/getFacetsByDomainNameAndTopicNames",
-        method : 'get',
-        params:{  
-            domainName:$scope.NowClass,
-            topicName:topics
-        }  
-    }).success(function(response) {
-        response = response["data"];
-        $scope.facets = response;
-        facets = $scope.facets;
-    }).error(function(response){
-        console.log('获取分面出错...');
-    });
-
-
-    /**
-     * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
-     */
-    $http({
-            url : ip_yotta + "/getAssemblesByDomainNameAndTopicNames",
-            method : 'get',
-             params:{  
-                domainName:domainName,
-                topicNames:topics
-            }  
-        }).success(function(response) {
-            response = response["data"];
-            $scope.assembles = response;
-            assembles = $scope.assembles;
-            /*assembleContent
-            assembleText
-            assembleScratchTime
-            topicName
-            facetName
-            domainName
-            sourceName*/
-        }).error(function(response){
-            console.log('获取碎片出错...');
-        });
 
 
     /**
@@ -93,16 +69,17 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
      $scope.getFacetsByDomainNameAndTopicNames = function(domainName,topicNames){
         $http({
-        url : ip_yotta + "/getFacetsByDomainNameAndTopicNames",
+        url : ip_yotta + "/facet/getFacetsByDomainNameAndTopicNames",
         method : 'get',
         params:{  
             domainName:domainName,
-            topicName:topicName
+            topicNames:topicNames
                 }  
         }).success(function(response) {
             response = response["data"];
-            $scope.facets = response;
-            facets = $scope.facets;
+            facets = response;
+            $scope.facets = facets[topics[0]["topicName"]];
+            console.log($scope.facets);
         }).error(function(response){
             console.log('获取分面出错...');
         });
@@ -115,7 +92,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
     $scope.getAssemblesByDomainNameAndTopicNames = function(domainName,topicNames){
          
         $http({
-            url : ip_yotta + "/getAssemblesByDomainNameAndTopicNames",
+            url : ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNames",
             method : 'get',
              params:{  
                 domainName:domainName,
@@ -123,8 +100,9 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
                      }  
         }).success(function(response) {
             response = response["data"];
-            $scope.assembles = response;
-            assembles = $scope.assembles;
+            assembles = response;
+            $scope.assembles = assembles[topics[0]["topicName"]];
+            $scope.assembleNumber = $scope.assembles.length;
             /*assembleContent
             assembleText
             assembleScratchTime
@@ -142,7 +120,6 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
     $scope.getFacetsByTopicName = function (topicName) {
         $scope.facets = facets[topicName];
-
     }
 
     /**
@@ -150,6 +127,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
      $scope.getAssemblesByTopicName = function(topicName){
         $scope.assembles = assembles[topicName];
+        $scope.assembleNumber = $scope.assembles.length;
      }
 
      /**
@@ -163,6 +141,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        $scope.assembleNumber = $scope.assembles.length;
      }
 //angular end
 });
