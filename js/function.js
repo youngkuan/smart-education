@@ -1,263 +1,150 @@
 
-//杨宽添加，显示分面树函数
-//
-//只显示树干
-function DisplayTrunk(dataset){
+ip_yotta = "http://202.117.54.42:8082/yotta";
+ip_gexinghua = "";
+domainName = "数据结构";
+topics = [];
+topicNames = "";
+facets = {};
+assembles = {};
 
-    //document.getElementById("RightfacetTree").innerHTML='';
-   $("#facetTreeDiv").empty();
-    var datas = []; 
-    multiple=1;
-    datas.push(dataset);
-    //分面树所占空间大小
-    svg = d3.select("div#facetTreeDiv")
-                .append("svg")
-                .attr("width", $("#facetTreeDiv").width() * multiple)
-                .attr("height",$("#facetTreeDiv").height() * multiple);
-    //分面树的位置
-    $("svg").draggable();   
-    var seed = {x: $("#facetTreeDiv").width()*0.5* multiple, y:($("#facetTreeDiv").height()-60)* multiple, name:dataset.name}; 
-    var tree = buildTree(dataset, seed4, multiple);
-    draw_trunk(tree, seed, svg, multiple);    
-}
-//显示树干和树枝
-function DisplayBranch(dataset){
-    $("#facetTreeDiv").empty();
-    var datas = []; 
-    multiple=0.9;
-    datas.push(dataset);
-    //分面树所占空间大小
-    svg = d3.select("div#facetTreeDiv")
-                .append("svg")
-                .attr("width", $("#facetTreeDiv").width())
-                .attr("height",$("#facetTreeDiv").height());
-    //分面树的位置    
-    $("svg").draggable();
-    var seed = {x: $("#facetTreeDiv").width()*0.5, y: $("#facetTreeDiv").height()-30, name:dataset.name}; 
-    var tree = buildBranch(dataset, seed, multiple);
-    draw_tree(tree, seed, svg, multiple);
-    //对分面树进行缩放
-    $("div#facetTreeDiv").bind('mousewheel', function(evt) {
-        var temp = multiple;//判断是保持0.25或者1.25不变
-        if( 0.3< multiple && multiple<1){
-            multiple+=evt.originalEvent.wheelDelta/5000;
-        }else if(multiple < 0.3){
-            if(evt.originalEvent.wheelDelta>0){
-                multiple+=evt.originalEvent.wheelDelta/5000;
-            }
-        }else{
-            if(evt.originalEvent.wheelDelta<0){
-                multiple+=evt.originalEvent.wheelDelta/5000;
+
+
+// angularjs控制
+var app=angular.module('app',[
+    'ui.bootstrap'
+]);
+app.controller('yangkuanController', function($scope, $http, $sce) {
+
+
+    /**
+     * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
+     */
+    $http({
+        method: 'GET',
+        url: "http://202.117.54.42:8080/yotta/topic/getTopicsByDomainName?domainName=数据结构"
+      }).then(function successCallback(response) {
+          $scope.topics = response.data.data;
+          topics = $scope.topics;
+          for(var i=0;i<topics.length-1;i++){
+            topicNames = topicNames + topics[i]["topicName"] + ",";
+          }
+          topicNames = topicNames + topics[topics.length-1]["topicName"];
+          /**
+         * 页面加载时根据默认课程名及主题，查询推荐主题列表下所有分面
+         */
+          $scope.getFacetsByDomainNameAndTopicNames(domainName,topicNames);
+          /**
+         * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
+         */
+          $scope.getAssemblesByDomainNameAndTopicNames(domainName,topicNames);
+          $scope.isCollapsed = true;
+          $scope.isCollapsedchildren = true;
+        }, function errorCallback(response) {
+          // 请求失败执行代码
+      });
+
+
+    /**
+     * 重新选择主题推荐方式时，查询该课程及推荐方式下的推荐主题列表
+     */
+     $scope.getTopicNamesByRecommendedWayAndDomainName = function(recommendedWay,domainName){
+        $http({
+        url : ip_gexinghua + "/getTopicNamesByRecommendedWayAndDomainName",
+        method : 'get',
+        params:{  
+            recommendedWay:recommendedWay,
+            domainName:domainName
+                }  
+        }).success(function(response) {
+            response = response["data"];
+            $scope.topics = response;
+            topics = $scope.topics;
+        }).error(function(response){
+            console.log('获取主题出错...');
+        });
+     }
+
+     /**
+     * 重新选择主题推荐方式时，查询该课程及推荐主题列表下的分面列表
+     */
+     $scope.getFacetsByDomainNameAndTopicNames = function(domainName,topicNames){
+        $http({
+        url : ip_yotta + "/facet/getFacetsByDomainNameAndTopicNames",
+        method : 'get',
+        params:{  
+            domainName:domainName,
+            topicNames:topicNames
+                }  
+        }).success(function(response) {
+            response = response["data"];
+            facets = response;
+            $scope.facets = facets[topics[0]["topicName"]];
+            console.log($scope.facets);
+        }).error(function(response){
+            console.log('获取分面出错...');
+        });
+     }
+
+
+    /**
+     * 重新选择主题推荐方式时，查询推荐主题列表下所有碎片
+     */
+    $scope.getAssemblesByDomainNameAndTopicNames = function(domainName,topicNames){
+         
+        $http({
+            url : ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNames",
+            method : 'get',
+             params:{  
+                domainName:domainName,
+                topicNames:topicNames
+                     }  
+        }).success(function(response) {
+            response = response["data"];
+            assembles = response;
+            $scope.assembles = assembles[topics[0]["topicName"]];
+            $scope.assembleNumber = $scope.assembles.length;
+            /*assembleContent
+            assembleText
+            assembleScratchTime
+            topicName
+            facetName
+            domainName
+            sourceName*/
+        }).error(function(response){
+            console.log('获取主题出错...');
+        });
+    }
+
+    /**
+     * 点击某一推荐主题，查询分面
+     */
+    $scope.getFacetsByTopicName = function (topicName) {
+        $scope.facets = facets[topicName];
+    }
+
+    /**
+     * 点击某一推荐主题，查询碎片
+     */
+     $scope.getAssemblesByTopicName = function(topicName){
+        $scope.assembles = assembles[topicName];
+        $scope.assembleNumber = $scope.assembles.length;
+     }
+
+     /**
+     * 点击某一推荐分面，查询碎片
+     */
+     $scope.getAssemblesByTopicNameAndFacetName = function(topicName,facetName){
+        assemblesTmp = assembles[topicName];
+        $scope.assembles = [];
+        for(var i=0;i<assemblesTmp.length;i++){
+            if(assemblesTmp[i]["facetName"]==facetName){
+                $scope.assembles.push(assemblesTmp[i]);
             }
         }
-        d3.selectAll("svg").remove(); //删除之前的svg
-        svg = d3.select("div#facetTreeDiv")
-                    .append("svg")
-                    .attr("width", w * multiple)
-                    .attr("height", h * multiple);
-        var seed0 = {x: $("#facetTreeDiv").width()*0.5, y: $("#facetTreeDiv").height()-30, name:dataset.name};
-        var tree0 = buildBranch(dataset, seed0, multiple);
-        draw_tree(tree0, seed0, svg, multiple);
-    }); 
-    /*****************************************************/ 
-}
+        $scope.assembleNumber = $scope.assembles.length;
+     }
+//angular end
+});
 
 
 
-
-// function addFacet(){
-//     var nowtype=document.getElementById("nowtype").innerText;
-//     console.log(nowtype);
-//     if(nowtype=="主题"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/createFacet1",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:$("input[name='FacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else if(nowtype=="一级分面"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/createFacet2",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,Facet1Name:nowOperateFacet1,Facet2Name:$("input[name='FacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else{
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/createFacet3",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,Facet1Name:nowOperateFacet1,Facet2Name:nowOperateFacet2,Facet3Name:$("input[name='FacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-// }
-
-
-
-// function updateFacet(){
-//     var name=document.getElementById("facet_name").innerText;
-//     var layer=document.getElementById("facet_layer").innerText;
-//     if(layer=="1"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/updataFacet1",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name,NewFacetName:$("input[name='NewFacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else if(layer=="2"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/updataFacet2",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name,NewFacetName:$("input[name='NewFacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else{
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/updataFacet3",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name,NewFacetName:$("input[name='NewFacetName']").val()},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-// }
-
-// function deleteFacet(){
-//     var name=document.getElementById("facet_name").innerText;
-//     var layer=document.getElementById("facet_layer").innerText;
-//     if(layer=="1"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/deleteFacet1",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else if(layer=="2"){
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/deleteFacet2",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-//     else{
-//         $.ajax({
-//              type: "GET",
-//              url: ip+"/FacetAPI/deleteFacet3",
-//              data: {ClassName:nowOperateClass,TermName:nowOperateTopic,FacetName:name},
-//              dataType: "json",
-//              async:false,
-//              success: function(data){
-//                          alert(data.success);
-//                       }
-//          });
-//     }
-// }
-
-
-function drag(ev){
-    ev.dataTransfer.setData("facet",ev.target.id);
-    // console.log(ev);
-    // console.log(ev.target.id);
-}
-
-function allowDrop(ev)
-{
-    ev.preventDefault();
-}
-
-function dropFacet1(ev,id){
-    ev.preventDefault();
-    var facet=ev.dataTransfer.getData("facet");
-    var FacetName=facet.split("_")[0];
-    // console.log(FacetName);
-    var array=id.split("_");
-    var TermName=array[0];
-    // console.log(nowOperateClass);
-    // console.log(TermName);
-    $.ajax({
-             type: "GET",
-             url: ip+"/FacetAPI/createFacet1",
-             data: {ClassName:nowOperateClass,TermName:TermName,FacetName:FacetName},
-             dataType: "json",
-             async:false,
-             success: function(data){
-                         alert(data.success);
-                      }
-         });
-}
-
-function dropFacet2(ev,id){
-    ev.preventDefault();
-    var facet2=ev.dataTransfer.getData("facet");
-    var Facet2Name=facet2.split("_")[0];
-    var array=id.split("_");
-    var TermName=array[0];
-    var Facet1Name=array[1];
-    $.ajax({
-             type: "GET",
-             url: ip+"/FacetAPI/createFacet2",
-             data: {ClassName:nowOperateClass,TermName:TermName,Facet1Name:Facet1Name,Facet2Name:Facet2Name},
-             dataType: "json",
-             async:false,
-             success: function(data){
-                         alert(data.success);
-                      }
-         });
-}
-
-function dropFacet3(ev,id){
-    ev.preventDefault();
-    var facet3=ev.dataTransfer.getData("facet");
-    var Facet3Name=facet3.split("_")[0];
-    var array=id.split("_");
-    var TermName=array[0];
-    var Facet1Name=array[1];
-    var Facet2Name=array[2];
-    $.ajax({
-             type: "GET",
-             url: ip+"/FacetAPI/createFacet3",
-             data: {ClassName:nowOperateClass,TermName:TermName,Facet1Name:Facet1Name,Facet2Name:Facet2Name,Facet3Name:Facet3Name},
-             dataType: "json",
-             async:false,
-             success: function(data){
-                         alert(data.success);
-                      }
-         });
-}
