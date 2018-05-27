@@ -27,7 +27,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
         "主题推荐方式六",
         "主题推荐方式七"
     ]
-    $scope.shownname = "选择主题推荐方式"
+    $scope.shownname = "选择主题推荐方式";
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -139,7 +139,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
      $scope.getAssemblesByTopicName = function(topicName){
         $scope.assembles = assembles[topicName];
-        $scope.assembleNumber = $scope.assembles.length;
+        $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
      }
 
      /**
