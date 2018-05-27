@@ -6,7 +6,7 @@ topics = [];
 topicNames = "";
 facets = {};
 assembles = {};
-
+topicIndex = 0;
 
 
 // angularjs控制

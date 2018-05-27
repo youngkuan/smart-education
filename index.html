@@ -95,8 +95,8 @@
                         <div class="box-header with-border">
                           <h3 class="box-title">主题推荐</h3>
                         </div>
-                        <div class="box-body" style="overflow-x: auto;overflow-y: visible">
-                            <table class="table">
+                        <div class="box-body">
+                            <!-- <table class="table">
                               <tbody style="">
                                 <tr class="active">
                                     <td ng-repeat="topic in topics">
@@ -121,9 +121,48 @@
                                     </td>
                                 </tr>
                               </tbody>
-                            </table>
+                            </table> -->
 
-                            
+                            <div class="row">
+                                <div class="col-md-1">
+                                  <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = (topicIndex - 1 < 0 ) ? 0 : topicIndex - 1">
+                                    <i class="fa fa-angle-left"></i>
+                                  </button>
+                                </div>
+                                <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 3%">
+            
+            
+                                  <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-boundary="viewport" data-toggle="dropdown" ng-mouseover="getFacetsByTopicName(topic.topicName);getAssemblesByTopicName(topic.topicName);">{{topic.topicName}}</button>
+                                    <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
+                                      <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
+                                        <div class=" list-group-item" style="background-color:#4682B4;">
+                                          <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);"
+                                            style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
+                                          </a>
+                                          <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
+                                            ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
+                                          </a>
+                                        </div>
+                                        <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
+                                          ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
+                                          <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
+                                            <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
+                                              ng-click="getAssemblesByTopicNameAndFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);">{{secondLayerFacet.secondLayerFacetName}}</a>
+                                            <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
+                                              style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
+                                              ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
+                                          </div>
+                                        </ul>
+                                  </div>
+                                </div>
+            
+                                <div class="col-md-1">
+                                  <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 == topics.length) ? topicIndex : topicIndex + 1">
+                                    <i class="fa fa-angle-right"></i>
+                                  </button>
+                                </div>
+                              </div>
                           </div>
                       </div>
 
