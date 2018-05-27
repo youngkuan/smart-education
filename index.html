@@ -121,13 +121,9 @@
                             <h3 class="box-title">主题推荐方式</h3>
                           </div>
                           <div class="box-body" style="padding: 18px">
-                            <div class="btn-group" >
-                              <button type="button" class="btn bg-purple btn-lg">{{shownname}}</button>
-                              <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                              </button>
-                              <ul class="dropdown-menu" role="menu">
+                            <div class="btn-group dropdown" >
+                              <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">{{shownname}}</button>
+                              <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%">
                                 <li ng-repeat="x in recnames"><a href="#" ng-click="updateRecname(x)">{{x}}</a></li>
                               </ul>
                             </div>

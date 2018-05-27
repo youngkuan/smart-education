@@ -42,3 +42,7 @@ span{
     align-items: center;
     justify-content: space-between;
 }
+
+.dropdown:hover .dropdown-menu{
+    display: block;
+}
