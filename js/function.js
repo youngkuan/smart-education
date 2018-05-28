@@ -6,7 +6,7 @@ topics = [];
 topicNames = "";
 facets = {};
 assembles = {};
-
+topicIndex = 0;
 
 
 // angularjs控制
@@ -15,7 +15,19 @@ var app=angular.module('app',[
 ]);
 app.controller('yangkuanController', function($scope, $http, $sce) {
 
-
+    /**
+     * 声明主题推荐方式名
+     */
+    $scope.recnames = [
+        "主题推荐方式一",
+        "主题推荐方式二",
+        "主题推荐方式三",
+        "主题推荐方式四",
+        "主题推荐方式五",
+        "主题推荐方式六",
+        "主题推荐方式七"
+    ]
+    $scope.shownname = "选择主题推荐方式";
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -127,7 +139,7 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
      $scope.getAssemblesByTopicName = function(topicName){
         $scope.assembles = assembles[topicName];
-        $scope.assembleNumber = $scope.assembles.length;
+        $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
      }
 
      /**
@@ -136,12 +148,20 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      $scope.getAssemblesByTopicNameAndFacetName = function(topicName,facetName){
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
+        if(assemblesTmp == undefined) return;
         for(var i=0;i<assemblesTmp.length;i++){
             if(assemblesTmp[i]["facetName"]==facetName){
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
         $scope.assembleNumber = $scope.assembles.length;
+     }
+
+     /**
+      * 点击某一主题推荐方式
+      */
+     $scope.updateRecname = function(recname){
+        $scope.shownname = recname;
      }
 //angular end
 });
