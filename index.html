@@ -39,17 +39,6 @@
   </style>
 
   <link rel="stylesheet" href="./plugins/jQuery/jquery.qtip.css" />
-  <script src="./plugins/jQuery/jquery-2.2.3.min.js"></script>
-  <script src="./plugins/d3js/d3.js" charset="utf-8"></script>
-  <script src="./plugins/datguijs/dat.gui.min.js"></script>
-  <script src="./plugins/jQuery/jquery.qtip.js"></script>
-  <script src="./plugins/jQuery/jquery-ui.js"></script>
-  <script src="./plugins/angularjs/angular.min.js"></script>
-  <script src="./plugins/angularjs/angular-animate.js"></script>
-  <script src="./plugins/angularjs/angular-sanitize.js"></script>
-  <script src="./plugins/ui-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="./plugins/ui-bootstrap/ui-bootstrap.js"></script>
-  <script src="./bootstrap/js/bootstrap.min.js"></script>
 
   <link rel="shortcut icon" href="./images/ico/forest3/favicon.ico">
   <link rel="apple-touch-icon-precomposed" sizes="128x128" href="./images/ico/forest3/forest_128.png">
@@ -60,9 +49,9 @@
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 </head>
 
 <body class="hold-transition skin-blue sidebar-collapse">
@@ -74,7 +63,7 @@
       <section class="content-header">
         <h1>
           智慧教育示范应用
-          <small>课程：数据结构
+          <small>课程：
             <a id="domainName"></a>
           </small>
         </h1>
@@ -140,11 +129,14 @@
 
                       <div class="btn-group dropdown">
                         <button type="button" class="btn btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);getAssemblesByTopicName(topic.topicName);">{{topic.topicName}}</button>
+                          ng-mouseover="getFacetsByTopicName(topic.topicName);getAssemblesByTopicName(topic.topicName);post_log_of_mouseover_topic('学习页面', topic.topicName, topic.topicId)">
+                          {{topic.topicName}}</button>
                         <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
                             <div class=" list-group-item" style="background-color:#4682B4;">
-                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);"
+                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
+                              post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);"
                                 style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
                               <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
@@ -155,7 +147,9 @@
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                               <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                                  ng-click="getAssemblesByTopicNameAndFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);">{{secondLayerFacet.secondLayerFacetName}}</a>
+                                  ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);
+                                  post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
+                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">{{secondLayerFacet.secondLayerFacetName}}</a>
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
                                   style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
                                   ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
@@ -208,7 +202,9 @@
                 <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px">
                   <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white">
                     <div class=" list-group-item" style="background-color:#4682B4;">
-                      <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);"
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
+                      post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);"
                         style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
                       <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
@@ -219,7 +215,10 @@
                       ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                       <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                          ng-click="getAssemblesByTopicNameAndFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);">{{secondLayerFacet.secondLayerFacetName}}</a>
+                          ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);
+                          post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
+                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
+                                  {{secondLayerFacet.secondLayerFacetName}}</a>
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
                           style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
                           ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
@@ -232,8 +231,6 @@
               </div>
             </div>
           </div>
-
-
           <div class="col-xs-9 col-md-9">
             <div class="box box-primary" style="margin-bottom:2px;">
               <!-- 此处是碎片信息 -->
@@ -255,11 +252,11 @@
                   <!-- 问题碎片的主题、分面和数据源信息 -->
                   <h1 class="box-title">
                     <small>
-                      facet:
+                      分面:
                       <span class="badge bg-purple">
-                        <a style="color: white" target="_blank">{{ assemble.facetName }}</a>
+                        <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
                       </span>
-                      &nbsp;&nbsp;&nbsp; source:
+                      &nbsp;&nbsp;&nbsp; 数据源:
                       <span class="badge bg-yellow">
                         <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                       </span>
@@ -289,7 +286,8 @@
 
                 <div class="box-footer" style="text-align: center;">
                   <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal">
-                    <i class="fa fa-fw fa-angle-double-down"></i>
+                    <i class="fa fa-fw fa-angle-double-down" ng-click="post_log_of_mouseclick_assemble('学习页面',assemble.topicName,assemble.topicId,
+                    assemble.firstLayerFacetName,assemble.firstLayerFacetId,assemble.secondLayerFacetName,assemble.secondLayerFacetId,assemble.assembleId);"></i>
                   </button>
                 </div>
                 <div class="modal fade" id="q_{{ assemble.assembleId }}_modal">
@@ -300,11 +298,11 @@
                             <span aria-hidden="true">&times;</span></button>
                           <h4 class="modal-title">                    
                             <small>
-                              facet:
+                              分面:
                               <span class="badge bg-purple">
-                                <a style="color: white" target="_blank">{{ assemble.facetName }}</a>
+                                <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
                               </span>
-                              &nbsp;&nbsp;&nbsp; source:
+                              &nbsp;&nbsp;&nbsp; 数据源:
                               <span class="badge bg-yellow">
                                 <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                               </span>
@@ -327,6 +325,7 @@
             </div>
 
           </div>
+        </div>
       </section>
       <!-- /.content -->
       </div>
@@ -347,7 +346,31 @@
     </div>
     <!-- ./wrapper -->
 
-    <script language="javascript" type="text/javascript" src="./js/function.js"></script>
+    
+  <script src="./plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <script src="./plugins/d3js/d3.js" charset="utf-8"></script>
+  <script src="./plugins/datguijs/dat.gui.min.js"></script>
+  <script src="./plugins/jQuery/jquery.qtip.js"></script>
+  <script src="./plugins/jQuery/jquery-ui.js"></script>
+  <script src="./plugins/angularjs/angular.min.js"></script>
+  <script src="./plugins/angularjs/angular-animate.js"></script>
+  <script src="./plugins/angularjs/angular-sanitize.js"></script>
+  <script src="./plugins/ui-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="./plugins/ui-bootstrap/ui-bootstrap.js"></script>
+  <script src="./bootstrap/js/bootstrap.min.js"></script>
+
+  <!-- 日志收集----请确保：此文件之前有jquery！！！ -->
+  <script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"
+        charset="utf-8"></script>
+  <script type="text/javascript" src="./js/post-log-SDK.js"></script>
+  <script type="text/javascript" charset="utf-8" async>
+    var log_server_url = "http://yotta.xjtushilei.com:8090" //该声明可以在调用sdk中两个函数之前的任意位置！！！
+    // var log_server_url = "http://localhost:8090" //该声明可以在调用sdk中两个函数之前的任意位置！！！
+    post_log_of_visit();
+  </script>
+  <!-- 日志收集----请确保：自己写的js文件在此位置之后，保证post_log_of_action()函数之前被浏览器加载！！！ -->
+
+  <script language="javascript" type="text/javascript" src="./js/function.js"></script>
 </body>
 
 </html>
