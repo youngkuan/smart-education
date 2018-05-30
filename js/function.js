@@ -1,5 +1,5 @@
 
-ip_yotta = "http://202.117.54.42:8080/yotta";
+ip_yotta = "http://202.117.54.42:8082";
 ip_gexinghua = "";
 domainName = "数据结构";
 topics = [];
@@ -7,7 +7,17 @@ topicNames = "";
 facets = {};
 assembles = {};
 topicIndex = 0;
+var courseId = "";
+var CourseWareName = "";
+var CourseCode = "";
+var studentCode = "";
+var coursewareid = "";
 
+
+$(document).ready(function () {
+    parse_URL_params();
+    document.getElementById("domainName").innerHTML=domainName;
+});
 
 // angularjs控制
 var app=angular.module('app',[
@@ -33,9 +43,13 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      */
     $http({
         method: 'GET',
-        url: "http://202.117.54.42:8080/yotta/topic/getTopicsByDomainName?domainName=数据结构"
+        url:  ip_yotta + "/topic/getTopicsByDomainName",
+        params:{
+            domainName:domainName,
+        }
       }).then(function successCallback(response) {
-          $scope.topics = response.data.data;
+          //截取前10个主题
+          $scope.topics = response.data.data.slice(0,10);
           topics = $scope.topics;
           for(var i=0;i<topics.length-1;i++){
             topicNames = topicNames + topics[i]["topicName"] + ",";
@@ -113,6 +127,8 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
         }).success(function(response) {
             response = response["data"];
             assembles = response;
+
+            $scope.assembles = [];
             $scope.assembles = assembles[topics[0]["topicName"]];
             $scope.assembleNumber = $scope.assembles.length;
             /*assembleContent
@@ -138,19 +154,35 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      * 点击某一推荐主题，查询碎片
      */
      $scope.getAssemblesByTopicName = function(topicName){
+
         $scope.assembles = assembles[topicName];
         $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
      }
 
      /**
-     * 点击某一推荐分面，查询碎片
+     * 点击某一推荐一级分面，查询碎片
      */
-     $scope.getAssemblesByTopicNameAndFacetName = function(topicName,facetName){
+     $scope.getAssemblesByTopicNameAndFirstLayerFacetName = function(topicName,facetName){
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if(assemblesTmp == undefined) return;
         for(var i=0;i<assemblesTmp.length;i++){
-            if(assemblesTmp[i]["facetName"]==facetName){
+            if(assemblesTmp[i]["firstLayerFacetName"]==facetName){
+                $scope.assembles.push(assemblesTmp[i]);
+            }
+        }
+        $scope.assembleNumber = $scope.assembles.length;
+     }
+
+      /**
+     * 点击某一推荐二级分面，查询碎片
+     */
+    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function(topicName,facetName){
+        assemblesTmp = assembles[topicName];
+        $scope.assembles = [];
+        if(assemblesTmp == undefined) return;
+        for(var i=0;i<assemblesTmp.length;i++){
+            if(assemblesTmp[i]["secondLayerFacetName"]==facetName){
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
@@ -163,8 +195,102 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
      $scope.updateRecname = function(recname){
         $scope.shownname = recname;
      }
+
+     /**
+      * @param {当前所在页面} pageKind 
+      * @param {主题名} topicName
+      * @param {主题id} topicId
+      */
+     $scope.post_log_of_mouseover_topic = function(pageKind, topicName, topicId){
+        var actionType = "点击-主题";
+        post_log_of_action(studentCode, pageKind, actionType,
+                            courseId, domainName, topicName, topicId,
+                            null, null, null, null,
+                            null, null, null);
+
+     }
+
+     /**
+      * 
+      * @param {当前所在页面} pageKind 
+      * @param {行为分类} actionType 
+      * @param topicName 主题名字
+      * @param topicId 主题id
+      * @param facetNameLevel1Name 1级分面名字
+      * @param facetNameLevel1Id 1级分面id
+      * @param facetNameLevel2Name 2级分面名字
+      * @param facetNameLevel2Id 2级分面id
+      */
+     $scope.post_log_of_mouseclick_facet = function(pageKind, actionType, topicName, topicId
+                                                    , facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id){
+            post_log_of_action(studentCode, pageKind, actionType,
+                                courseId, domainName, topicName, topicId, 
+                                facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
+                                null, null, null);
+     }
+
+     /**
+      * 
+      * @param {当前所在页面} pageKind 
+      * @param topicName 主题名字
+      * @param topicId 主题id
+      * @param facetNameLevel1Name 1级分面名字
+      * @param facetNameLevel1Id 1级分面id
+      * @param facetNameLevel2Name 2级分面名字
+      * @param facetNameLevel2Id 2级分面id
+      * @param {碎片id} fragmentId 
+      */
+     $scope.post_log_of_mouseclick_assemble = function(pageKind, topicName, topicId
+                                                     , facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id
+                                                     , fragmentId){
+        var actionType = "点击-碎片";
+        post_log_of_action(studentCode, pageKind, actionType,
+            courseId, domainName, topicName, topicId, 
+            facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
+            fragmentId, null, null);
+     }
+
+     $scope.post_log_of_mouseclick_URL = function(pageKind, jumpTargetType, jumpTargetUrl){
+         var actionType = "跳转";
+         post_log_of_action(studentCode, pageKind, actionType, 
+                            courseId, domainName, null, null,
+                            null, null, null, null, 
+                            null, jumpTargetType, jumpTargetUrl);
+     }
+
 //angular end
 });
 
+
+//获取地址栏里（URL）传递的课程名参数  
+function parse_URL_params() {  
+    //url例子：http://yotta.xjtushilei.com:888/Yotta/module/construct/pages/kg_wangyuan/index.html?
+    // courseid=16
+    // &CourseWareName=%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86(yotta)
+    // &CourseCode=JS008
+    // &studentcode=1069800109030205
+    // &coursewareid=2681
+    var url = decodeURI(location.search); //?className=数据结构;
+    
+    if(url.indexOf("?") != -1){//url中存在问号，也就说有参数。     
+        var str = url.substr(1);  //得到?后面的字符串
+        var args = str.split("&");
+        courseId = args[0].split("=")[1];
+        CourseWareName = args[1].split("=")[1];
+        CourseCode = args[2].split("=")[1];
+        studentCode = args[3].split("=")[1];
+        coursewareid = args[4].split("=")[1];
+        // $.ajax({
+        //     type: "GET",
+        //     url:  ip + "/DomainAPI/getDomainByCourseId?courseId=" + courseId,
+        //     data: {},
+        //     async:false,
+        //     dataType: "json",
+        //     success: function (response) {
+        //         domainName = response[0].courseWiki;
+        //     }
+        // });
+　　}
+}  
 
 
