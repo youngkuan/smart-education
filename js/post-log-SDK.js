@@ -118,6 +118,9 @@ function post_log_of_action(studentCode, pageKind, actionType,
         case "外部网页链接":
             params.jumpTargetType = 4;
             break;
+        case null:
+            params.jumpTargetType = null;
+            break;
         default:
             //未知
             params.jumpTargetType = 0;
