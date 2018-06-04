@@ -49,7 +49,8 @@ app.controller('yangkuanController', function($scope, $http, $sce) {
         }
       }).then(function successCallback(response) {
           //截取前10个主题
-          $scope.topics = response.data.data.slice(0,10);
+        //   $scope.topics = response.data.data.slice(0,10);
+        $scope.topics = response.data.data;
           topics = $scope.topics;
           for(var i=0;i<topics.length-1;i++){
             topicNames = topicNames + topics[i]["topicName"] + ",";

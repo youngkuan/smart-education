@@ -2,11 +2,23 @@
 <html>
 
 <head>
+  
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible">
   <title>智慧教育示范应用</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <script  type="text/javascript" charset="utf-8">
+    (function () {
+            var trust = ["localhost", "127.0.0.1", "yotta.xjtushilei.com", "47.95.145.72"];
+            var referrer = document.referrer;
+            var sign = "://";
+            var pos = referrer.indexOf(sign) + sign.length;
+            referrer = referrer.slice(pos).split("/")[0].split(":")[0];
+            //if (trust.join("-").indexOf(referrer) === -1 || referrer === null || referrer === "") window.location.href = 'http://www.xjtudlc.com';
+        })();
+  </script>
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
 
