@@ -31,6 +31,9 @@ function post_log_of_visit() {
         dataType: 'text',
         contentType: "application/json;charset=utf-8",
         data: JSON.stringify(params),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Verification-referrer', document.referrer || '');
+        },
         success: function (data) {
             console.log(data);
         }
@@ -132,6 +135,9 @@ function post_log_of_action(studentCode, pageKind, actionType,
         dataType: 'text',
         contentType: "application/json;charset=utf-8",
         data: JSON.stringify(params),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Verification-referrer', document.referrer || '');
+        },
         success: function (data) {
             console.log(data);
         }
