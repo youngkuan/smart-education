@@ -176,13 +176,13 @@
                     </div>
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 3%">
                       <div class="btn-group dropdown">
-                        <button ng-style="backcolor[{{states[topic.topicId]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);"
+                        <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
+                          ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;">
                           {{topic.topicName}}</button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
-                            <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId]}}]">
+                            <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId-1]}}]">
                               <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click=""
                                 style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
@@ -192,7 +192,7 @@
                             </div>
                             <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
-                              <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId]}}]">
+                              <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId-1]}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                                   ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
