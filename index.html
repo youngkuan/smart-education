@@ -177,14 +177,13 @@
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 3%">
                       <div class="btn-group dropdown">
                         <button ng-style="backcolor[{{states[topic.topicId]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);post_log_of_mouseover_topic('学习页面', topic.topicName, topic.topicId);showdropdown = true;"
+                          ng-mouseover="getFacetsByTopicName(topic.topicName);"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;">
                           {{topic.topicName}}</button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
                             <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId]}}]">
-                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);"
+                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click=""
                                 style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
                               <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
@@ -195,8 +194,7 @@
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                               <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId]}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                                  ng-click="post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">{{secondLayerFacet.secondLayerFacetName}}</a>
+                                  ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
                                   style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
                                   ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
