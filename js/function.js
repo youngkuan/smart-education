@@ -18,7 +18,6 @@ var learnt = 0;
 var learning = 0;
 var willlearn = 0;
 
-
 $(document).ready(function () {
     parse_URL_params();
 });
@@ -341,6 +340,7 @@ function parse_URL_params() {
                         $('#learnt').html(learnt.toString());
                         $('#learning').html(learning.toString());
                         $('#willlearn').html(willlearn.toString());
+                        $('#sumtopic').html(states.length.toString())
                     }
                 });
             }
