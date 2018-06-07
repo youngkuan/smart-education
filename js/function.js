@@ -49,6 +49,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
     $scope.color = [{ "color": "#008000" }, { "color": "#DC143C" }, { "color": "#848484" }];
     $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
+
+    $scope.showdropdown = false;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -176,6 +178,12 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.facets = facets[topicName];
     }
 
+    /**
+     * update facets by click
+     */
+    $scope.getFacetsByTopicNameThroughClick = function (topicName) {
+        $scope.clickfacets = facets[topicName];
+    }
     /**
      * 点击某一推荐主题，查询碎片
      */
