@@ -70,28 +70,84 @@
   <div class="wrapper">
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" ng-app="app" ng-controller="yangkuanController">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
           智慧教育示范应用
           <small>课程：
-            <a id="domainName"></a>
+            <a>{{ domainname }}</a>
+            &nbsp;&nbsp;主题数：
+            <a id="sumtopic"></a>
           </small>
         </h1>
       </section>
 
       <!-- Main content -->
-      <section class="content" ng-app="app" ng-controller="yangkuanController">
+      <section class="content" >
 
         <div class="row" style="">
           <div class="col-md-2" style="height: 165px;">
             <div class="box box-primary" style="height:88%;text-align:center;">
-              <div class="box-body" style="margin: 30px;">
-                <h3 style="display: inline-block; vertical-align: middle;">
-                  知识主题推荐学习
-                </h3>
+                <div class="box-header with-border">
+                    <h3 class="box-title">知识主题推荐学习</h3>
+
+                  </div>
+              <div class="box-body" style="padding: 0;">
+                <button type="button" style="border: 0"  data-toggle="modal" data-target="#learningstatus">
+                <img src="images/ico/forest3/forest_128.png" style="height: 90px;"/>
+              </button>
               </div>
+              <div class="modal fade" id="learningstatus">
+                  <div class="modal-dialog" style="width: 1600px">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span></button>
+                        <h3 class="modal-title">                    
+                            知识森林鸟瞰图    
+                        </h3>
+                      </div>
+                      <div class="modal-body" style="overflow: auto;">
+                          <div class="row">
+                              <div class="col-xs-8 col-md-8">
+                                  <div id="mydiv2">
+                                      <div class='panel panel-info'>
+                                          <div class='panel-heading'>
+                                            <h3 class='panel-title'><i class="glyphicon glyphicon-tree-conifer"></i> 知识森林概览</h3>
+                                          </div>
+                                          <div class='panel-body' data-spy="scroll"
+                                               style="height:680px;overflow:hidden; position: relative;">
+                                              <div id="echarts1" style="width: 100%;height:650px"></div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="col-xs-4 col-md-4">
+                                  <div id="mydiv1">
+                                      <div class='panel panel-info'>
+                                          <div class='panel-heading'>
+                                              <h3 class='panel-title'><i class="glyphicon glyphicon-tree-deciduous"></i> 主题分面树</h3>
+                                          </div>
+                                          <div class='panel-body' data-spy="scroll"
+                                               style="height:680px;overflow:hidden; position: relative;">
+                                              <div id="mysvg2" style="width: 100%;height:680px">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
             </div>
           </div>
           <div class="col-md-8" style="height: 165px">
@@ -100,36 +156,18 @@
                     鼠标移动到主题自动显示分面学习状态 -->
               <div class="box box-solid" style="padding-left: 4px;padding-right: 4px">
                 <div class="box-header with-border">
-                  <h3 class="box-title">主题推荐</h3>
+                  <h3 class="box-title">主题推荐
+                    <small>
+                      &nbsp;&nbsp;已学习：
+                      <a id="learnt" ng-style="color[0]"></a>
+                      &nbsp;&nbsp;正在学习：
+                      <a id="learning" ng-style="color[1]"></a>
+                      &nbsp;&nbsp;未学习：
+                      <a id="willlearn" ng-style="color[2]"></a>
+                    </small>
+                  </h3>
                 </div>
                 <div class="box-body">
-                  <!-- <table class="table">
-                              <tbody style="">
-                                <tr class="active">
-                                    <td ng-repeat="topic in topics">
-                                      <div class="btn-group dropdown" >
-                                        <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" ng-mouseover="getFacetsByTopicName(topic.topicName);getAssemblesByTopicName(topic.topicName);">{{topic.topicName}}</button>
-                                        <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
-                                            <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
-                                              <div class=" list-group-item" style="background-color:#4682B4;">
-                                                <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
-                                                </a>
-                                                <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
-                                                </a>
-                                            </div>
-                                            <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2" ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
-                                              <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
-                                              <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                                              ng-click="getAssemblesByTopicNameAndFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);">{{secondLayerFacet.secondLayerFacetName}}</a>
-                                              <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;" ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
-                                            </div>
-                                        </ul>
-                                      </div>
-                                    </td>
-                                </tr>
-                              </tbody>
-                            </table> -->
-
                   <div class="row">
                     <div class="col-md-1">
                       <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = (topicIndex - 1 < 0 ) ? 0 : topicIndex - 1">
@@ -137,18 +175,15 @@
                       </button>
                     </div>
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 3%">
-
-
                       <div class="btn-group dropdown">
-                        <button type="button" class="btn btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);getAssemblesByTopicName(topic.topicName);post_log_of_mouseover_topic('学习页面', topic.topicName, topic.topicId)">
+                        <button ng-style="backcolor[{{states[topic.topicId]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
+                          ng-mouseover="getFacetsByTopicName(topic.topicName);"
+                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;">
                           {{topic.topicName}}</button>
-                        <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
+                        <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
-                            <div class=" list-group-item" style="background-color:#4682B4;">
-                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
-                              post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);"
+                            <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId]}}]">
+                              <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click=""
                                 style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
                               <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
@@ -157,11 +192,9 @@
                             </div>
                             <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
-                              <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
+                              <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId]}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                                  ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);
-                                  post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">{{secondLayerFacet.secondLayerFacetName}}</a>
+                                  ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
                                   style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
                                   ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
@@ -212,7 +245,7 @@
               </div>
               <div id="facetClassDiv" class="box-body">
                 <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px">
-                  <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white">
+                  <li class=" list-group-item" ng-repeat="firstLayerFacet in clickfacets " style="background-color: white">
                     <div class=" list-group-item" style="background-color:#4682B4;">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
@@ -283,12 +316,12 @@
                           </div> -->
                 </div>
 
-                <div class="box-body" style="height: 70px; overflow: hidden;width: 1360px;">
+                <div class="box-body" style="height: 70px; overflow: hidden;">
                   <!-- <div ng-if="assemble.assembleText.length < 220"> -->
 
                   <!-- 问题正文 -->
                   <!-- 超过两行隐藏并添加省略号 -->
-                  <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;height: 60px;overflow: hidden;">
+                  <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;">
                     {{assemble.assembleText}}
 
                   </p>
@@ -303,7 +336,7 @@
                   </button>
                 </div>
                 <div class="modal fade" id="q_{{ assemble.assembleId }}_modal">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog" style="width: 1000px">
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -321,7 +354,7 @@
         
                             </small></h4>
                         </div>
-                        <div class="modal-body" style="overflow: auto;line-height: 30px">
+                        <div class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
                           <p>{{assemble.assembleText}}</p>
                         </div>
                         <div class="modal-footer">
@@ -370,6 +403,11 @@
   <script src="./plugins/ui-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="./plugins/ui-bootstrap/ui-bootstrap.js"></script>
   <script src="./bootstrap/js/bootstrap.min.js"></script>
+  <script src="./plugins/echartjs/echarts.min-kg.js"></script>
+  <script src="./plugins/dataTooljs/dataTool.js"></script>
+
+  <script src="./js/buildSimpleTree.js"></script>
+  <script src="./js/drawMap.js"></script>
 
   <!-- 日志收集----请确保：此文件之前有jquery！！！ -->
   <script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"
