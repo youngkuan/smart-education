@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="./dist/css/AdminLTE.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="./dist/css/skins/_all-skins.min.css">
-  <link rel="stylesheet" href="./bootstrap/css/bootstrap-arrow-buttons.css">
+  <link rel="stylesheet" href="./bootstrap/css/bootstrap-directional-buttons.css">
 
   <style>
     path,
@@ -176,8 +176,8 @@
                     </div>
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 3%">
                       <div class="btn-group dropdown">
-                        <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true"
+                        <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-lg btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
+                          ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;">
                           {{topic.topicName}}</button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
@@ -190,7 +190,7 @@
                                 ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
                               </a>
                             </div>
-                            <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
+                            <ul uib-collapse="false" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                               <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId-1]}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
@@ -244,7 +244,7 @@
                 <h3 class="box-title" id="class_name">分面展示</h3>
               </div>
               <div id="facetClassDiv" class="box-body">
-                <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px">
+                <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
                   <li class=" list-group-item" ng-repeat="firstLayerFacet in clickfacets " style="background-color: white">
                     <div class=" list-group-item" style="background-color:#4682B4;">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
