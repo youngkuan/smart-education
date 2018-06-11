@@ -94,7 +94,7 @@
 
                   </div>
               <div class="box-body" style="padding: 0;">
-                <button type="button" style="border: 0"  data-toggle="modal" data-target="#learningstatus">
+                <button type="button" style="border: 0"  data-toggle="modal" data-target="#learningstatus" ng-click="post_log_of_mouseclick_Global_Graph('学习页面');">
                 <img src="images/ico/forest3/forest_128.png" style="height: 90px;"/>
               </button>
               </div>
@@ -178,8 +178,8 @@
                       <div class="btn-group dropdown">
                         <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-lg btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
-                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;">
-                          {{topic.topicName}}</button>
+                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;" ng-bind="topic.topicName">
+                          </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
                             <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId-1]}}]">
@@ -227,7 +227,7 @@
                     <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">{{shownname}}</button>
                     <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%">
                       <li ng-repeat="x in recnames">
-                        <a href="#" ng-click="updateRecname(x)">{{x}}</a>
+                        <a href="#" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
                       </li>
                     </ul>
                   </div>
@@ -321,8 +321,8 @@
 
                   <!-- 问题正文 -->
                   <!-- 超过两行隐藏并添加省略号 -->
-                  <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;">
-                    {{assemble.assembleText}}
+                  <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;" 
+                  ng-bind="assemble.assembleText">
 
                   </p>
 
