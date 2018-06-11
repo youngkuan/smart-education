@@ -44,7 +44,7 @@ function post_log_of_visit() {
  * 传输用户行为日志
  * @param studentCode 学生id
  * @param pageKind 当前所在页面(学习页面，知识森林页面，未知)
- * @param actionType 行为分类（点击-1级分面，点击-2级分面，点击-主题，点击-碎片，跳转）
+ * @param actionType 行为分类（点击-1级分面，点击-2级分面，点击-主题，点击-碎片，跳转,点击推荐路径类型,点击鸟瞰图）
  * @param courseId 课程id
  * @param courseName 课程名字
  * @param topicName 主题名字
@@ -56,11 +56,12 @@ function post_log_of_visit() {
  * @param fragmentId 碎片id
  * @param jumpTargetType 跳转url类型（内部文件，内部视频，外部网页链接，本系统链接）
  * @param jumpTargetUrl 跳转url
+ * @param recommendationMethod 推荐路径类型
  */
 function post_log_of_action(studentCode, pageKind, actionType,
                             courseId, courseName, topicName, topicId,
                             facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
-                            fragmentId, jumpTargetType, jumpTargetUrl) {
+                            fragmentId, jumpTargetType, jumpTargetUrl,recommendationMethod) {
     check_load_jquery()
     var params = {};
     params.user_id = studentCode;
@@ -75,6 +76,7 @@ function post_log_of_action(studentCode, pageKind, actionType,
     params.facetNameLevel2Name = facetNameLevel2Name;
     params.facetNameLevel2Id = facetNameLevel2Id;
     params.fragmentId = fragmentId;
+    params.recommendationMethod = recommendationMethod;
     params.jumpTargetType = jumpTargetType;
     params.jumpTargetUrl = jumpTargetUrl;
     switch (params.operationSourceId) {
@@ -103,6 +105,15 @@ function post_log_of_action(studentCode, pageKind, actionType,
             break;
         case "跳转":
             params.operationId = 5;
+            break;
+        case "点击推荐路径类型":
+            params.operationId = 6;
+            break;
+        case "点击鸟瞰图":
+            params.operationId = 7;
+            break;
+        case "点击视频":
+            params.operationId = 8;
             break;
         default:
             //未知

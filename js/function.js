@@ -240,7 +240,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, topicName, topicId,
             null, null, null, null,
-            null, null, null);
+            null, null, null, null);
 
     }
 
@@ -260,7 +260,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, topicName, topicId,
             facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
-            null, null, null);
+            null, null, null, null);
     }
 
     /**
@@ -281,7 +281,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, topicName, topicId,
             facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
-            fragmentId, null, null);
+            fragmentId, null, null, null);
     }
 
     $scope.post_log_of_mouseclick_URL = function (pageKind, jumpTargetType, jumpTargetUrl) {
@@ -289,8 +289,30 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, null, null,
             null, null, null, null,
-            null, jumpTargetType, jumpTargetUrl);
+            null, jumpTargetType, jumpTargetUrl, null);
     }
+    /**
+     * 推荐路径
+     */
+    $scope.post_log_of_mouseclick_recommendation = function (pageKind, recommendationMethod) {
+        var actionType = "点击推荐路径类型";
+        post_log_of_action(studentCode, pageKind, actionType,
+            courseId, domainName, null, null,
+            null, null, null, null,
+            null, null, null, recommendationMethod);
+    }
+
+    /**
+     * 点击鸟瞰图
+     */
+    $scope.post_log_of_mouseclick_Global_Graph = function (pageKind) {
+        var actionType = "点击鸟瞰图";
+        post_log_of_action(studentCode, pageKind, actionType,
+            courseId, domainName, null, null,
+            null, null, null, null,
+            null, null, null, null);
+    }
+
 
     //angular end
 });
