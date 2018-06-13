@@ -11,6 +11,7 @@ var courseId = "";
 var CourseWareName = "";
 var CourseCode = "";
 var studentCode = "1069800109030205";
+// var studentCode = "";
 var coursewareid = "";
 var domainId = "1";
 var states = [];
@@ -29,6 +30,33 @@ var app = angular.module('app', [
     'ui.bootstrap'
 ]);
 app.controller('yangkuanController', function ($scope, $http, $sce) {
+
+    // /**
+    //  * parse url
+    //  */
+    // $scope.url = $location.url();
+    // $scope.search = $location.search();
+    // $scope.courseId = $scope.search.courseid;
+    // $scope.CourseWareName = $scope.search.CourseWareName;
+    // $scope.CourseCode = $scope.search.CourseCode;
+    // $scope.studentCode = $scope.studentcode;
+    // $scope.coursewareid = $scope.coursewareid;
+
+    // /**
+    //  * 页面加载时将网院courseid转换为domainid
+    //  */
+    // $http({
+    //     method: 'GET',
+    //     url: ip + "/wangyuan/getDomainByCourseId",
+    //     params: {
+    //         courseId: courseId,
+    //     }
+    // }).then(function successCallback(response) {
+    //     $scope.domainId = response.data.wiki.domainId;
+    //     $scope.domainName = response.data.wiki.domainName;
+    // }, function errorCallback(response) {
+    //     // 请求失败执行代码
+    // });
 
     /**
      * 声明主题推荐方式名
@@ -51,6 +79,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
 
     $scope.showdropdown = false;
+
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -183,6 +212,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.getFacetsByTopicNameThroughClick = function (topicName) {
         $scope.clickfacets = facets[topicName];
+        $scope.currentTopicName = topicName;
+        $scope.currentFirstLayerFacetName = "";
+        $scope.currentSecondLayerFacetName = "";
     }
     /**
      * 点击某一推荐主题，查询碎片
@@ -205,13 +237,16 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        $scope.topicName = topicName;
+        $scope.currentFirstLayerFacetName = facetName;
+        $scope.currentSecondLayerFacetName = "";
         $scope.assembleNumber = $scope.assembles.length;
     }
 
     /**
    * 点击某一推荐二级分面，查询碎片
    */
-    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName) {
+    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName,firstLayerFacetName) {
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if (assemblesTmp == undefined) return;
@@ -220,6 +255,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        $scope.currentTopicName = topicName;
+        $scope.currentFirstLayerFacetName = firstLayerFacetName;
+        $scope.currentSecondLayerFacetName = facetName;
         $scope.assembleNumber = $scope.assembles.length;
     }
 

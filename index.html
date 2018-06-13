@@ -177,10 +177,10 @@
                     </div>
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 0%">
                       <div class="btn-group dropdown">
-                        <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
+                        <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
-                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);">
+                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);" ng-style="backcolor[{{states[topic.topicId-1]}}]">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
@@ -243,7 +243,7 @@
             <!-- 此处是主题分面的信息 -->
             <div class="box box-primary" style="height: 100%;">
               <div class="box-header with-border">
-                <h3 class="box-title" id="class_name">分面展示</h3>
+                <h3 class="box-title" id="class_name"><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b>分面展示</h3>
               </div>
               <div id="facetClassDiv" class="box-body">
                 <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
@@ -261,7 +261,7 @@
                       ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
                       <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                          ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName);
+                          ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
                           post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                                   ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>
@@ -281,7 +281,7 @@
             <div class="box box-primary" style="margin-bottom:2px;">
               <!-- 此处是碎片信息 -->
               <div class="box-header with-border">
-                <h4>碎片数量：{{ assembleNumber }}</h4>
+                <h4><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4>
                 <!-- <p>问题数量：</p> -->
               </div>
             </div>
