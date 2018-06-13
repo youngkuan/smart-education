@@ -178,7 +178,8 @@
                       <div class="btn-group dropdown">
                         <button ng-style="backcolor[{{states[topic.topicId-1]}}]" type="button" class="btn btn-primary btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true"
-                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;" ng-bind="topic.topicName">
+                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
+                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);" ng-bind="topic.topicName">
                           </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
