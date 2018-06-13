@@ -176,7 +176,7 @@
                       </button>
                     </div>
                     <div class="col-md-2" ng-repeat="topic in topics.slice(topicIndex,topicIndex+5)" style="padding-left: 0%">
-                      <div class="btn-group dropdown">
+                      <div class="btn-group dropdown" ng-if="states">
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
@@ -281,7 +281,7 @@
             <div class="box box-primary" style="margin-bottom:2px;">
               <!-- 此处是碎片信息 -->
               <div class="box-header with-border">
-                <h4><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4>
+                <h4><b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4>
                 <!-- <p>问题数量：</p> -->
               </div>
             </div>
@@ -331,7 +331,7 @@
                 <!-- /.box-body -->
 
                 <div class="box-footer" style="text-align: center;">
-                  <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal">
+                  <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal" data-backdrop="static" data-keyboard="false" ng-click="videoOrNot(assemble.assembleText)">
                     <i class="fa fa-fw fa-angle-double-down" ng-click="post_log_of_mouseclick_assemble('学习页面',assemble.topicName,assemble.topicId,
                     assemble.firstLayerFacetName,assemble.firstLayerFacetId,assemble.secondLayerFacetName,assemble.secondLayerFacetId,assemble.assembleId);"></i>
                   </button>
@@ -357,11 +357,14 @@
                           </small>
                         </h4>
                       </div>
-                      <div class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
+                      <div ng-if="! isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
                         <p>{{assemble.assembleText}}</p>
                       </div>
+                      <div ng-if="isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
+                        <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls"></video>
+                      </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo()" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                     <!-- /.modal-content -->

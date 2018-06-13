@@ -24,7 +24,6 @@ $(document).ready(function () {
 });
 
 
-
 // angularjs控制
 var app = angular.module('app', [
     'ui.bootstrap'
@@ -79,7 +78,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
 
     $scope.showdropdown = false;
-
+    $scope.isVideo = false;
+    $scope.videourl = "";
+    $scope.currTopicName = null;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -237,6 +238,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        $scope.assembles = $scope.adjustFragmentOrder($scope.assembles);
         $scope.topicName = topicName;
         $scope.currentFirstLayerFacetName = facetName;
         $scope.currentSecondLayerFacetName = "";
@@ -255,6 +257,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        // $scope.assembles = $scope.adjustFragmentOrder($scope.assembles);
         $scope.currentTopicName = topicName;
         $scope.currentFirstLayerFacetName = firstLayerFacetName;
         $scope.currentSecondLayerFacetName = facetName;
@@ -351,7 +354,51 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             null, null, null, null);
     }
 
+    /**
+     * 若碎片中有视频地址，调整碎片顺序
+     */
+    $scope.adjustFragmentOrder = function(frags){
+        if(frags == null) return;
+        var pattern = new RegExp("http.*mp4");
+        var tmpfrags = frags;
+        for(var i = 0; i < frags.length; i++){
+            if(pattern.exec(frags[i].assembleContent)){
+                var tmp = frags[i];
+                tmpfrags.splice(i,1);
+                tmpfrags.unshift(tmp);
+            }
+        }
+        return tmpfrags;
+    };
 
+    /**
+     * 判断展开的碎片是否是视频
+     */
+    $scope.videoOrNot = function(text){
+        var pattern = new RegExp("http.*mp4");
+        if(pattern.exec(text)){
+            $scope.isVideo = true;
+            $scope.videourl = pattern.exec(text)[0];         
+        }else{
+            $scope.isVideo = false;
+        }
+    };
+
+    $scope.trustSrc = function(url){
+        return $sce.trustAsResourceUrl(url);
+    }
+
+    /**
+     * 暂停视频播放
+     */
+    $scope.pauseVideo = function(){
+        console.log("pause");
+        var video = document.querySelectorAll("video");
+        for(var i = 0; i < video.length; i ++){
+            video[i].pause();
+        }
+
+    }
     //angular end
 });
 
