@@ -367,10 +367,10 @@ function parse_URL_params() {
                                     break;
                             }
                         }
-                        $('#learnt').html(learnt.toString());
-                        $('#learning').html(learning.toString());
-                        $('#willlearn').html(willlearn.toString());
-                        $('#sumtopic').html(states.length.toString())
+                        $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
+                        $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
+                        $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
+                        $('#sumtopic').html(states.length.toString());
                     }
                 });
             }
