@@ -131,8 +131,16 @@ function init() {
                         show: node.symbolSize > showNodeSymbolSize
                     }
                 };
-
-                node.category = node.attributes.modularity_class;
+                // console.log(index);
+                // node.category = Number(states[index]);
+                //console.log(states);
+                topics.forEach(function(topic,index){
+                    if(topic["topicName"] == node.id){
+                        node.category = Number(states[index]);
+                        return;
+                    }
+                });
+                //console.log(node.category);
                 // node.category = states[getTopicIdByTopicName(topics,node.id)];
                 // console.log(topics);
                 switch (node.category) {

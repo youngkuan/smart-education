@@ -4,12 +4,6 @@
 function post_log_of_visit() {
     check_load_jquery()
     var params = {};
-    if (remote_ip_info['ret'] == 1) {
-        params.country = remote_ip_info['country'];
-        params.province = remote_ip_info['province'];
-        params.city = remote_ip_info['city'];
-        params.district = remote_ip_info['district'];
-    }
     if (document) {
         params.domain = document.domain || '';
         params.url = document.URL || '';
@@ -44,7 +38,7 @@ function post_log_of_visit() {
  * 传输用户行为日志
  * @param studentCode 学生id
  * @param pageKind 当前所在页面(学习页面，知识森林页面，未知)
- * @param actionType 行为分类（点击-1级分面，点击-2级分面，点击-主题，点击-碎片，跳转,点击推荐路径类型,点击鸟瞰图）
+ * @param actionType 行为分类（点击-1级分面，点击-2级分面，点击-主题，点击-碎片，跳转,点击推荐路径类型,点击鸟瞰图，点击视频）
  * @param courseId 课程id
  * @param courseName 课程名字
  * @param topicName 主题名字

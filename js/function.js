@@ -11,6 +11,7 @@ var courseId = "";
 var CourseWareName = "";
 var CourseCode = "";
 var studentCode = "1069800109030205";
+// var studentCode = "";
 var coursewareid = "";
 var domainId = "1";
 var states = [];
@@ -18,10 +19,9 @@ var learnt = 0;
 var learning = 0;
 var willlearn = 0;
 
-$(document).ready(function () {
-    parse_URL_params();
-});
-
+// $(document).ready(function () {
+//     parse_URL_params();
+// });
 
 
 // angularjs控制
@@ -29,6 +29,33 @@ var app = angular.module('app', [
     'ui.bootstrap'
 ]);
 app.controller('yangkuanController', function ($scope, $http, $sce) {
+
+    // /**
+    //  * parse url
+    //  */
+    // $scope.url = $location.url();
+    // $scope.search = $location.search();
+    // $scope.courseId = $scope.search.courseid;
+    // $scope.CourseWareName = $scope.search.CourseWareName;
+    // $scope.CourseCode = $scope.search.CourseCode;
+    // $scope.studentCode = $scope.studentcode;
+    // $scope.coursewareid = $scope.coursewareid;
+
+    // /**
+    //  * 页面加载时将网院courseid转换为domainid
+    //  */
+    // $http({
+    //     method: 'GET',
+    //     url: ip + "/wangyuan/getDomainByCourseId",
+    //     params: {
+    //         courseId: courseId,
+    //     }
+    // }).then(function successCallback(response) {
+    //     $scope.domainId = response.data.wiki.domainId;
+    //     $scope.domainName = response.data.wiki.domainName;
+    // }, function errorCallback(response) {
+    //     // 请求失败执行代码
+    // });
 
     /**
      * 声明主题推荐方式名
@@ -51,6 +78,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
 
     $scope.showdropdown = false;
+    $scope.isVideo = false;
+    $scope.videourl = "";
+    $scope.currTopicName = null;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -65,6 +95,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         //   $scope.topics = response.data.data.slice(0,10);
         $scope.topics = response.data.data;
         topics = $scope.topics;
+
+        parse_URL_params();
+
         for (var i = 0; i < topics.length - 1; i++) {
             topicNames = topicNames + topics[i]["topicName"] + ",";
         }
@@ -79,6 +112,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
+        
     }, function errorCallback(response) {
         // 请求失败执行代码
     });
@@ -183,6 +217,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.getFacetsByTopicNameThroughClick = function (topicName) {
         $scope.clickfacets = facets[topicName];
+        $scope.currentTopicName = topicName;
+        $scope.currentFirstLayerFacetName = "";
+        $scope.currentSecondLayerFacetName = "";
     }
     /**
      * 点击某一推荐主题，查询碎片
@@ -205,13 +242,17 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        $scope.assembles = $scope.adjustFragmentOrder($scope.assembles);
+        $scope.topicName = topicName;
+        $scope.currentFirstLayerFacetName = facetName;
+        $scope.currentSecondLayerFacetName = "";
         $scope.assembleNumber = $scope.assembles.length;
     }
 
     /**
    * 点击某一推荐二级分面，查询碎片
    */
-    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName) {
+    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName,firstLayerFacetName) {
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if (assemblesTmp == undefined) return;
@@ -220,6 +261,10 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.assembles.push(assemblesTmp[i]);
             }
         }
+        // $scope.assembles = $scope.adjustFragmentOrder($scope.assembles);
+        $scope.currentTopicName = topicName;
+        $scope.currentFirstLayerFacetName = firstLayerFacetName;
+        $scope.currentSecondLayerFacetName = facetName;
         $scope.assembleNumber = $scope.assembles.length;
     }
 
@@ -313,7 +358,51 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             null, null, null, null);
     }
 
+    /**
+     * 若碎片中有视频地址，调整碎片顺序
+     */
+    $scope.adjustFragmentOrder = function(frags){
+        if(frags == null) return;
+        var pattern = new RegExp("http.*mp4");
+        var tmpfrags = frags;
+        for(var i = 0; i < frags.length; i++){
+            if(pattern.exec(frags[i].assembleContent)){
+                var tmp = frags[i];
+                tmpfrags.splice(i,1);
+                tmpfrags.unshift(tmp);
+            }
+        }
+        return tmpfrags;
+    };
 
+    /**
+     * 判断展开的碎片是否是视频
+     */
+    $scope.videoOrNot = function(text){
+        var pattern = new RegExp("http.*mp4");
+        if(pattern.exec(text)){
+            $scope.isVideo = true;
+            $scope.videourl = pattern.exec(text)[0];         
+        }else{
+            $scope.isVideo = false;
+        }
+    };
+
+    $scope.trustSrc = function(url){
+        return $sce.trustAsResourceUrl(url);
+    }
+
+    /**
+     * 暂停视频播放
+     */
+    $scope.pauseVideo = function(){
+        console.log("pause");
+        var video = document.querySelectorAll("video");
+        for(var i = 0; i < video.length; i ++){
+            video[i].pause();
+        }
+
+    }
     //angular end
 });
 
@@ -367,10 +456,10 @@ function parse_URL_params() {
                                     break;
                             }
                         }
-                        $('#learnt').html(learnt.toString());
-                        $('#learning').html(learning.toString());
-                        $('#willlearn').html(willlearn.toString());
-                        $('#sumtopic').html(states.length.toString())
+                        $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
+                        $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
+                        $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
+                        $('#sumtopic').html(states.length.toString());
                     }
                 });
             }
