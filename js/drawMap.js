@@ -117,9 +117,9 @@ function init() {
         if (graph == null || states == null) {
             console.log("没有认知路径");
         } else {
-            categories[0] = { name: '已学习' };
+            categories[2] = { name: '已学习' };
             categories[1] = { name: '正在学习' };
-            categories[2] = { name: '未学习' };
+            categories[0] = { name: '未学习' };
             // 设置节点格式
             graph.nodes.forEach(function (node) {
                 node.itemStyle = null;
@@ -144,13 +144,13 @@ function init() {
                 // node.category = states[getTopicIdByTopicName(topics,node.id)];
                 // console.log(topics);
                 switch (node.category) {
-                    case 0:
+                    case 2:
                         studied++;
                         break;
                     case 1:
                         studying++;
                         break;
-                    case 2:
+                    case 0:
                         studysoon++;
                         break;
                 }
@@ -175,7 +175,7 @@ function init() {
                 animationDuration: 1500,
                 animationEasingUpdate: 'quinticInOut',
                 // 绿色、猩红色、黑色（红绿灯版本）
-                color: ['#008000', '#DC143C', '#848484'],
+                color: ['#848484', '#DC143C', '#008000'],
                 // 绿色、金色、深灰色 （地铁版本）
                 // color:['#008000','#FFD700','#A9A9A9'],
                 series: [{
@@ -208,6 +208,7 @@ function init() {
                         { name: '正在学习', value: studying },
                         { name: '未学习', value: studysoon }
                     ],
+                    color: ['#008000', '#DC143C', '#848484'],
                     name: '学习进度',
                     type: 'pie',
                     center: ['15%', '80%'],

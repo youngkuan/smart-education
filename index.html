@@ -160,11 +160,11 @@
                   <h3 class="box-title">主题推荐
                     <small>
 
-                      <a id="learnt" ng-style="color[0]"></a>
+                      <a id="learnt" ng-style="color[2]"></a>
 
                       <a id="learning" ng-style="color[1]"></a>
 
-                      <a id="willlearn" ng-style="color[2]"></a>
+                      <a id="willlearn" ng-style="color[0]"></a>
                     </small>
                   </h3>
                 </div>
@@ -180,7 +180,7 @@
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
-                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);" ng-style="backcolor[{{states[topic.topicId-1]}}]">
+                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="backcolor[{{states[topic.topicId-1]}}]">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">

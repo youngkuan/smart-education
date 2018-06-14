@@ -74,8 +74,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
     $scope.shownname = "选择主题推荐方式";
 
-    $scope.color = [{ "color": "#008000" }, { "color": "#DC143C" }, { "color": "#848484" }];
-    $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
+    $scope.color = [{ "color": "#848484" }, { "color": "#DC143C" }, { "color": "#008000" }];
+    $scope.backcolor = [{ "background-color": "#848484" }, { "background-color": "#DC143C" }, { "background-color": "#008000" }];
 
     $scope.showdropdown = false;
     $scope.isVideo = false;
@@ -402,7 +402,25 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             video[i].pause();
         }
 
-    }
+    };
+
+    /**
+     * 更新学习状态
+     */
+    $scope.updateState = function(){
+        $http({
+            url: "202.117.54.42:8080/LearningPathWeb/Path/States/updateUserStates",
+            method: 'get',
+            params: {
+                domainId: domainId,
+                userId: studentCode
+            }
+        }).success(function (response) {
+
+        }).error(function (response) {
+            console.log('更新学习状态出错');
+        });
+    };
     //angular end
 });
 
@@ -445,13 +463,13 @@ function parse_URL_params() {
                         init();
                         for (var i = 0; i < states.length; i++) {
                             switch (states[i]) {
-                                case '0':
+                                case '2':
                                     learnt++;
                                     break;
                                 case '1':
                                     learning++;
                                     break;
-                                case '2':
+                                case '0':
                                     willlearn++;
                                     break;
                             }
