@@ -134,12 +134,18 @@ function init() {
                 // console.log(index);
                 // node.category = Number(states[index]);
                 //console.log(states);
-                topics.forEach(function(topic,index){
-                    if(topic["topicName"] == node.id){
-                        node.category = Number(states[index]);
-                        return;
-                    }
-                });
+                if(node.id == "(Start)数据结构"){
+                    node.category = 2;
+                    return;
+                }else{
+                    topics.forEach(function(topic,index){
+                        if(topic["topicName"] == node.id ){
+                            node.category = Number(states[index]);
+                            return;
+                        }
+                    });
+                }
+
                 //console.log(node.category);
                 // node.category = states[getTopicIdByTopicName(topics,node.id)];
                 // console.log(topics);
@@ -220,6 +226,7 @@ function init() {
             // 点击节点跳转到社团结构
             myChart.on('click', function (params) {
                 if (params.dataType == 'node') {
+                    // console.log(params);
                     $.ajax({
                         type: "POST",
                         // url: ip+"/AssembleAPI/getTreeByTopicForFragment",
