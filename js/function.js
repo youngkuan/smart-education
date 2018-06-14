@@ -19,9 +19,9 @@ var learnt = 0;
 var learning = 0;
 var willlearn = 0;
 
-$(document).ready(function () {
-    parse_URL_params();
-});
+// $(document).ready(function () {
+//     parse_URL_params();
+// });
 
 
 // angularjs控制
@@ -95,6 +95,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         //   $scope.topics = response.data.data.slice(0,10);
         $scope.topics = response.data.data;
         topics = $scope.topics;
+
+        parse_URL_params();
+
         for (var i = 0; i < topics.length - 1; i++) {
             topicNames = topicNames + topics[i]["topicName"] + ",";
         }
@@ -109,6 +112,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
+        
     }, function errorCallback(response) {
         // 请求失败执行代码
     });
