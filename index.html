@@ -344,11 +344,12 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 class="modal-title">
+                          <b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
                           <small>
-                            分面:
+                            <!-- 分面:
                             <span class="badge bg-purple">
                               <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
-                            </span>
+                            </span> -->
                             &nbsp;&nbsp;&nbsp; 数据源:
                             <span class="badge bg-yellow">
                               <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
