@@ -176,9 +176,9 @@
                       </button>
                     </div>
                     <!-- 四种推荐 -->
-                    <div class="col-md-2" ng-repeat="topic in (currTopics.length > 5 ? currTopics.slice(topicIndex,topicIndex+5) : currTopics) " style="padding-left: 0%">
+                    <!-- <div class="col-md-2" ng-repeat="topic in (currTopics.length > 5 ? currTopics.slice(topicIndex,topicIndex+5) : currTopics) " style="padding-left: 0%"> -->
                     <!-- 所有主题推荐 -->
-                    <!-- <div class="col-md-2" ng-repeat="topic in (topics.length > 5 ? topics.slice(topicIndex,topicIndex+5) : topics) " style="padding-left: 0%"> -->
+                    <div class="col-md-2" ng-repeat="topic in (topics.length > 5 ? topics.slice(topicIndex,topicIndex+5) : topics) " style="padding-left: 0%">
                       <div class="btn-group dropdown" ng-if="states != null">
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
@@ -210,9 +210,9 @@
 
                     <div class="col-md-1" style="z-index: 100;">
                       <!-- 四种推荐 -->
-                      <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= currTopics.length) ? topicIndex : topicIndex + 1">
+                      <!-- <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= currTopics.length) ? topicIndex : topicIndex + 1"> -->
                       <!-- 所有主题推荐 -->
-                      <!-- <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= topics.length) ? topicIndex : topicIndex + 1"> -->
+                      <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= topics.length) ? topicIndex : topicIndex + 1">
                         <i class="fa fa-angle-right"></i>
                       </button>
                     </div>

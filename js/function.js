@@ -1,4 +1,3 @@
-
 ip_yotta = "http://202.117.54.42:8082";
 ip_gexinghua = "";
 var domainName = "数据结构";
@@ -10,8 +9,8 @@ topicIndex = 0;
 var courseId = "";
 var CourseWareName = "";
 var CourseCode = "";
-var studentCode = "1069800109030205";
-// var studentCode = "";
+// var studentCode = "1069800109030205";
+var studentCode = "";
 var coursewareid = "";
 var domainId = "1";
 var states = [];
@@ -61,21 +60,31 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * 声明主题推荐方式名
      */
     $scope.recnames = [
-        "主题推荐方式一",
-        "主题推荐方式二",
-        "主题推荐方式三",
-        "主题推荐方式四",
-        "主题推荐方式五",
-        "主题推荐方式六",
-        "主题推荐方式七"
-    ]
-
+        "最短学习路径",
+        "补漏学习路径",
+        "补全学习路径",
+        "热度学习路径"
+    ];
+    $scope.currTopics = [];
+    $scope.recarrays = [];
     $scope.domainname = domainName;
 
-    $scope.shownname = "选择主题推荐方式";
+    $scope.shownname = "最短学习路径";
 
-    $scope.color = [{ "color": "#008000" }, { "color": "#DC143C" }, { "color": "#848484" }];
-    $scope.backcolor = [{ "background-color": "#008000" }, { "background-color": "#DC143C" }, { "background-color": "#848484" }];
+    $scope.color = [{
+        "color": "#848484"
+    }, {
+        "color": "#DC143C"
+    }, {
+        "color": "#008000"
+    }];
+    $scope.backcolor = [{
+        "background-color": "#848484"
+    }, {
+        "background-color": "#DC143C"
+    }, {
+        "background-color": "#008000"
+    }];
 
     $scope.showdropdown = false;
     $scope.isVideo = false;
@@ -103,34 +112,87 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }
         topicNames = topicNames + topics[topics.length - 1]["topicName"];
         /**
-       * 页面加载时根据默认课程名及主题，查询推荐主题列表下所有分面
-       */
+         * 页面加载时根据默认课程名及主题，查询推荐主题列表下所有分面
+         */
         $scope.getFacetsByDomainNameAndTopicNames(domainName, topicNames);
         /**
-       * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
-       */
+         * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
+         */
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
-        
+
+        // $scope.updateState();
+        //get states
+        $http({
+            url: ip_yotta + "/state/getByDomainIdAndUserId",
+            method: 'get',
+            params: {
+                domainId: domainId,
+                userId: studentCode
+            }
+        }).success(function (response) {
+            $scope.states = response.data.states.split(',');
+            states = $scope.states;
+        }).error(function (response) {
+
+        });
+
+        //get rec
+        // $http({
+        //     url: "http://202.117.54.42:8080/LearningPathWeb/Path/LearningPath/readUserLearningPath",
+        //     method: 'get',
+        //     params: {
+        //         domainId: domainId,
+        //         userId: studentCode
+        //     }
+        // }).success(function(response){
+        //     console.log(response);
+        //     // response.split(';').forEach(element => {
+        //     //     var recarray = [];
+        //     //     element.split(',').forEach(element1 => {
+        //     //         topics.forEach(topic => {
+        //     //             if(topic.topicId == Number(element1)){
+        //     //                 recarray.push(topic);
+        //     //                 return;
+        //     //             }
+        //     //         });
+
+        //     //     });
+        //     //     $scope.recarrays.push(recarray);
+        //     //     $scope.currTopics = $scope.recarrays[0];
+        //     // });
+        // }).error(function(response){
+        //     console.log(response);
+        // });
+        $.ajax({
+            type: 'GET',
+            url: "http://202.117.54.42:8080/LearningPathWeb/Path/LearningPath/readUserLearningPath?domainId=" + domainId + "&userId=" + studentCode,
+            data: {},
+            async: false,
+            dataType: "text",
+            success: function (response) {
+                response.split(';').forEach(element => {
+                    var recarray = [];
+                    element.split(',').forEach(element1 => {
+                        topics.forEach(topic => {
+                            if (topic.topicId == Number(element1)) {
+                                recarray.push(topic);
+                                return;
+                            }
+                        });
+
+                    });
+                    $scope.recarrays.push(recarray);
+                    $scope.currTopics = $scope.recarrays[0];
+                });
+            }
+        });
     }, function errorCallback(response) {
         // 请求失败执行代码
     });
 
-    //get states
-    $http({
-        url: ip_yotta + "/state/getByDomainIdAndUserId",
-        method: 'get',
-        params: {
-            domainId: domainId,
-            userId: studentCode
-        }
-    }).success(function (response) {
-        $scope.states = response.data.states.split(',');
-        states = $scope.states;
-    }).error(function (response) {
 
-    });
 
 
     /**
@@ -154,8 +216,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     }
 
     /**
-    * 重新选择主题推荐方式时，查询该课程及推荐主题列表下的分面列表
-    */
+     * 重新选择主题推荐方式时，查询该课程及推荐主题列表下的分面列表
+     */
     $scope.getFacetsByDomainNameAndTopicNames = function (domainName, topicNames) {
         $http({
             url: ip_yotta + "/facet/getFacetsByDomainNameAndTopicNames",
@@ -231,8 +293,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     }
 
     /**
-    * 点击某一推荐一级分面，查询碎片
-    */
+     * 点击某一推荐一级分面，查询碎片
+     */
     $scope.getAssemblesByTopicNameAndFirstLayerFacetName = function (topicName, facetName) {
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
@@ -250,9 +312,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     }
 
     /**
-   * 点击某一推荐二级分面，查询碎片
-   */
-    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName,firstLayerFacetName) {
+     * 点击某一推荐二级分面，查询碎片
+     */
+    $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName, firstLayerFacetName) {
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if (assemblesTmp == undefined) return;
@@ -273,6 +335,20 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.updateRecname = function (recname) {
         $scope.shownname = recname;
+        switch (recname) {
+            case '最短学习路径':
+                $scope.currTopics = $scope.recarrays[0];
+                break;
+            case '补漏学习路径':
+                $scope.currTopics = $scope.recarrays[1];
+                break;
+            case '补全学习路径':
+                $scope.currTopics = $scope.recarrays[2];
+                break;
+            case '热度学习路径':
+                $scope.currTopics = $scope.recarrays[3];
+                break;
+        }
     }
 
     /**
@@ -300,8 +376,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * @param facetNameLevel2Name 2级分面名字
      * @param facetNameLevel2Id 2级分面id
      */
-    $scope.post_log_of_mouseclick_facet = function (pageKind, actionType, topicName, topicId
-        , facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id) {
+    $scope.post_log_of_mouseclick_facet = function (pageKind, actionType, topicName, topicId, facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id) {
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, topicName, topicId,
             facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id,
@@ -319,9 +394,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * @param facetNameLevel2Id 2级分面id
      * @param {碎片id} fragmentId 
      */
-    $scope.post_log_of_mouseclick_assemble = function (pageKind, topicName, topicId
-        , facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id
-        , fragmentId) {
+    $scope.post_log_of_mouseclick_assemble = function (pageKind, topicName, topicId, facetNameLevel1Name, facetNameLevel1Id, facetNameLevel2Name, facetNameLevel2Id, fragmentId) {
         var actionType = "点击-碎片";
         post_log_of_action(studentCode, pageKind, actionType,
             courseId, domainName, topicName, topicId,
@@ -361,14 +434,14 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     /**
      * 若碎片中有视频地址，调整碎片顺序
      */
-    $scope.adjustFragmentOrder = function(frags){
-        if(frags == null) return;
+    $scope.adjustFragmentOrder = function (frags) {
+        if (frags == null) return;
         var pattern = new RegExp("http.*mp4");
         var tmpfrags = frags;
-        for(var i = 0; i < frags.length; i++){
-            if(pattern.exec(frags[i].assembleContent)){
+        for (var i = 0; i < frags.length; i++) {
+            if (pattern.exec(frags[i].assembleContent)) {
                 var tmp = frags[i];
-                tmpfrags.splice(i,1);
+                tmpfrags.splice(i, 1);
                 tmpfrags.unshift(tmp);
             }
         }
@@ -378,31 +451,63 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     /**
      * 判断展开的碎片是否是视频
      */
-    $scope.videoOrNot = function(text){
+    $scope.videoOrNot = function (text) {
         var pattern = new RegExp("http.*mp4");
-        if(pattern.exec(text)){
+        if (pattern.exec(text)) {
             $scope.isVideo = true;
-            $scope.videourl = pattern.exec(text)[0];         
-        }else{
+            $scope.videourl = pattern.exec(text)[0];
+        } else {
             $scope.isVideo = false;
         }
     };
 
-    $scope.trustSrc = function(url){
+    $scope.trustSrc = function (url) {
         return $sce.trustAsResourceUrl(url);
     }
 
     /**
      * 暂停视频播放
      */
-    $scope.pauseVideo = function(){
+    $scope.pauseVideo = function () {
         console.log("pause");
         var video = document.querySelectorAll("video");
-        for(var i = 0; i < video.length; i ++){
+        for (var i = 0; i < video.length; i++) {
             video[i].pause();
         }
 
-    }
+    };
+
+    /**
+     * 更新学习状态
+     */
+    $scope.updateState = function () {
+        // $http({
+        //     url: "http://202.117.54.42:8080/LearningPathWeb/Path/States/updateUserStates",
+        //     method: 'get',
+        //     params: {
+        //         domainId: domainId,
+        //         userId: studentCode
+        //     },
+        //     responseType: "text"
+        // }).success(function (response) {
+
+        // }).error(function (response) {
+        //     console.log('更新学习状态出错');
+        // });
+        $.ajax({
+            type: 'GET',
+            url: "http://202.117.54.42:8080/LearningPathWeb/Path/States/updateUserStates?domainId=" + domainId + "&userId=" + studentCode,
+            data: {},
+            // async: false,
+            dataType: "text",
+            success: function (response) {
+                console.log("success update states");
+            },
+            error: function(response){
+                console.log("failed update states");
+            }
+        });
+    };
     //angular end
 });
 
@@ -416,8 +521,8 @@ function parse_URL_params() {
     // &studentcode=1069800109030205
     // &coursewareid=2681
     var url = decodeURI(location.search); //?className=数据结构;
-    if (url.indexOf("?") != -1) {//url中存在问号，也就说有参数。 
-        var str = url.substr(1);  //得到?后面的字符串
+    if (url.indexOf("?") != -1) { //url中存在问号，也就说有参数。 
+        var str = url.substr(1); //得到?后面的字符串
         var args = str.split("&");
         courseId = args[0].split("=")[1];
         CourseWareName = args[1].split("=")[1];
@@ -445,13 +550,13 @@ function parse_URL_params() {
                         init();
                         for (var i = 0; i < states.length; i++) {
                             switch (states[i]) {
-                                case '0':
+                                case '2':
                                     learnt++;
                                     break;
                                 case '1':
                                     learning++;
                                     break;
-                                case '2':
+                                case '0':
                                     willlearn++;
                                     break;
                             }
@@ -462,9 +567,11 @@ function parse_URL_params() {
                         $('#sumtopic').html(states.length.toString());
                     }
                 });
+
+
             }
         });
+
+
     }
 }
-
-
