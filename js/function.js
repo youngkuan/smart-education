@@ -122,7 +122,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
 
-        // $scope.updateState();
+        $scope.updateState();
         //get states
         $http({
             url: ip_yotta + "/state/getByDomainIdAndUserId",
@@ -134,6 +134,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }).success(function (response) {
             $scope.states = response.data.states.split(',');
             states = $scope.states;
+            for (var i = 0; i < topics.length - 1; i++) {
+                topics[i].state = Number(states[i]);
+            }
         }).error(function (response) {
 
         });
