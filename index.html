@@ -183,12 +183,12 @@
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
-                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="backcolor[{{states[topic.topicId-1]}}]">
+                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="backcolor[{{topic.state}}]">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
-                            <div class=" list-group-item" ng-style="backcolor[{{states[topic.topicId-1]}}]">
+                            <div class=" list-group-item" ng-style="backcolor[{{topic.state}}]">
                               <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
                               <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
@@ -197,7 +197,7 @@
                             </div>
                             <ul uib-collapse="false" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                               ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
-                              <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{states[topic.topicId-1]}}]">
+                              <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{topic.state}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                                   ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
@@ -346,9 +346,9 @@
                   <div class="modal-dialog" style="width: 1000px">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
-                        </button>
+                        </button> -->
                         <h4 class="modal-title">
                           <b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
                           <small>
@@ -371,7 +371,7 @@
                         <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls"></video>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo()" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo();updateState();" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                     <!-- /.modal-content -->
