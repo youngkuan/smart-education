@@ -61,7 +61,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.recnames = [
         "最短学习路径",
-        "补漏学习路径",
+        "有效学习路径",
         "补全学习路径",
         "热度学习路径"
     ];
