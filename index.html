@@ -183,7 +183,7 @@
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
-                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="backcolor[{{topic.state}}]">
+                          post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="updateBackColor(topic.state)">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
@@ -235,7 +235,7 @@
                     <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">{{shownname}}</button>
                     <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%">
                       <li ng-repeat="x in recnames">
-                        <a href="#" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
+                        <button type="button" class="dropdown-item btn btn-light" href="#" ng-disabled="disableRecForNewbie(x)" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
                       </li>
                     </ul>
                   </div>
