@@ -67,7 +67,7 @@ function init() {
                         var tree0 = buildTree(data, seed0, multiple);
                         draw_tree(tree0, seed0, svg, multiple);
                     });
-                })
+                });
 
                 /*****************************************************/
             }

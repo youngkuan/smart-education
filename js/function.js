@@ -123,23 +123,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.isCollapsedchildren = true;
 
         $scope.updateState();
-        //get states
-        $http({
-            url: ip_yotta + "/state/getByDomainIdAndUserId",
-            method: 'get',
-            params: {
-                domainId: domainId,
-                userId: studentCode
-            }
-        }).success(function (response) {
-            $scope.states = response.data.states.split(',');
-            states = $scope.states;
-            for (var i = 0; i < topics.length - 1; i++) {
-                topics[i].state = Number(states[i]);
-            }
-        }).error(function (response) {
 
-        });
 
         //get rec
         // $http({
@@ -504,6 +488,24 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             // async: false,
             dataType: "text",
             success: function (response) {
+                update_states();
+                //get states
+                $http({
+                    url: ip_yotta + "/state/getByDomainIdAndUserId",
+                    method: 'get',
+                    params: {
+                        domainId: domainId,
+                        userId: studentCode
+                    }
+                }).success(function (response) {
+                    $scope.states = response.data.states.split(',');
+                    states = $scope.states;
+                    for (var i = 0; i < topics.length - 1; i++) {
+                        topics[i].state = Number(states[i]);
+                    }
+                }).error(function (response) {
+
+                });
                 console.log("success update states");
             },
             error: function(response){
@@ -511,6 +513,20 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             }
         });
     };
+
+    //update botton color
+    $scope.updateBackColor = function(state){
+        // console.log(state);
+        switch(state){
+            case 0:
+                return {"background-color": "#848484"};
+            case 1:
+                return {"background-color": "#DC143C"};
+            case 2:
+                return {"background-color": "#008000"};
+        }
+    };
+
     //angular end
 });
 
@@ -542,39 +558,44 @@ function parse_URL_params() {
             success: function (response) {
                 domainId = response.data.wiki.domainId;
                 domainName = response.data.wiki.domainName;
-                $.ajax({
-                    type: "GET",
-                    url: ip + "/state/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
-                    data: {},
-                    async: false,
-                    dataType: "json",
-                    success: function (response) {
-                        states = response.data.states.split(',');
-                        init();
-                        for (var i = 0; i < states.length; i++) {
-                            switch (states[i]) {
-                                case '2':
-                                    learnt++;
-                                    break;
-                                case '1':
-                                    learning++;
-                                    break;
-                                case '0':
-                                    willlearn++;
-                                    break;
-                            }
-                        }
-                        $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
-                        $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
-                        $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
-                        $('#sumtopic').html(states.length.toString());
-                    }
-                });
-
-
+                update_states();
             }
         });
 
 
     }
+}
+
+function update_states(){
+    $.ajax({
+        type: "GET",
+        url: ip + "/state/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
+        data: {},
+        async: false,
+        dataType: "json",
+        success: function (response) {
+            states = response.data.states.split(',');
+            init();
+            learnt = 0;
+            learning = 0;
+            willlearn = 0;
+            for (var i = 0; i < states.length; i++) {
+                switch (states[i]) {
+                    case '2':
+                        learnt++;
+                        break;
+                    case '1':
+                        learning++;
+                        break;
+                    case '0':
+                        willlearn++;
+                        break;
+                }
+            }
+            $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
+            $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
+            $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
+            $('#sumtopic').html(states.length.toString());
+        }
+    });
 }
