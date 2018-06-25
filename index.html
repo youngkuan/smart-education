@@ -235,7 +235,7 @@
                     <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">{{shownname}}</button>
                     <ul class="dropdown-menu" role="menu" style="margin-top: 0px;width: 100%">
                       <li ng-repeat="x in recnames">
-                        <a href="#" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
+                        <button type="button" class="dropdown-item btn btn-light" href="#" ng-disabled="disableRecForNewbie(x)" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
                       </li>
                     </ul>
                   </div>

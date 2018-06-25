@@ -61,9 +61,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.recnames = [
         "最短学习路径",
+        "热度学习路径",
         "有效学习路径",
-        "补全学习路径",
-        "热度学习路径"
+        "补全学习路径"
     ];
     $scope.currTopics = [];
     $scope.recarrays = [];
@@ -527,6 +527,15 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }
     };
 
+    // disable rec 
+    $scope.disableRecForNewbie = function(recname){
+        if(learnt + learning == 0){
+            if(recname == "有效学习路径" || recname == "补全学习路径"){
+                return true;
+            }
+        }
+        return false;
+    };
     //angular end
 });
 
