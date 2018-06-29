@@ -491,7 +491,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 update_states();
                 //get states
                 $http({
-                    url: ip_yotta + "/state/getByDomainIdAndUserId",
+                    url: ip_yotta + "/topicState/getByDomainIdAndUserId",
                     method: 'get',
                     params: {
                         domainId: domainId,
@@ -578,7 +578,7 @@ function parse_URL_params() {
 function update_states(){
     $.ajax({
         type: "GET",
-        url: ip + "/state/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
+        url: ip + "/topicState/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
         data: {},
         async: false,
         dataType: "json",
