@@ -25,7 +25,8 @@ var willlearn = 0;
 
 // angularjs控制
 var app = angular.module('app', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngSanitize'
 ]);
 app.controller('yangkuanController', function ($scope, $http, $sce) {
 
@@ -535,6 +536,11 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             }
         }
         return false;
+    };
+
+    // delete 'file:///...png' in assemble
+    $scope.deletePrefixWitheFile = function(content){
+        return content.replace(/file:.png/i,"");
     };
     //angular end
 });

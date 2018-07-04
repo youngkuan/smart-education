@@ -8,7 +8,8 @@
   <title>智慧教育示范应用</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
+  <!-- csdn 设置了图片防盗链 -->
+  <meta name="referrer" content="no-referrer">
   <script type="text/javascript" charset="utf-8">
     (function () {
       var trust = ["localhost", "127.0.0.1", "yotta.xjtushilei.com", "47.95.145.72"];
@@ -365,7 +366,8 @@
                         </h4>
                       </div>
                       <div ng-if="! isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
-                        <p>{{assemble.assembleText}}</p>
+                        <p style="width: 100%;height: auto;word-wrap:break-word;word-break:break-all;overflow: hidden;" ng-bind-html="deletePrefixWitheFile(assemble.assembleContent)"></p>
+                        <!-- <p>{{assemble.assembleText}}</p> -->
                       </div>
                       <div ng-if="isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
                         <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls"></video>
