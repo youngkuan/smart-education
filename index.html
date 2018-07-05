@@ -253,10 +253,10 @@
                 <h3 class="box-title" id="class_name"><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b>分面展示</h3>
               </div>
               <div id="facetClassDiv" class="box-body">
-                <ul class="" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
+                <ul class="list-group" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
                   <li class=" list-group-item" ng-repeat="firstLayerFacet in clickfacets " style="background-color: white">
                     <div class=" list-group-item" style="background-color:#4682B4;">
-                      <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                               ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
@@ -264,11 +264,11 @@
                         ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
                       </a>
                     </div>
-                    <ul uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
-                      ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets">
+                    <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
+                      ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets" style="margin-left: 40px;margin-bottom: 0px">
                       <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
-                          ng-click="getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
+                          ng-click="clickChangeColor($event);getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
                           post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                                   ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>

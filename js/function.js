@@ -542,6 +542,13 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.deletePrefixWitheFile = function(content){
         return content.replace(/file:.png/i,"");
     };
+
+    // click change facet color
+    $scope.clickChangeColor = function(event){
+        var id = event.target.getAttribute("id");
+        $("div.list-group-item").css('background-color','#4682B4');
+        $("#"+id).parent().css('background-color','blue');
+    };
     //angular end
 });
 
@@ -614,3 +621,10 @@ function update_states(){
         }
     });
 }
+$(document).ready(function(){
+    $('a').click(function(e) {
+        e.preventDefault();
+        $(this).parent().addClass('active').siblings().removeClass('active');
+        console.log(test);
+    });
+})
