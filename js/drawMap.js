@@ -19,7 +19,7 @@ function init() {
             // old api
             // url:  ip + "/AssembleAPI/getTreeByDomain?ClassName=" + domainName,
             // new api:
-            url: ip + "/topic/getFirstTopicByDomianName?domainName=" + domainName,
+            url: ip + "/topic/getFirstTopicByDomainName?domainName=" + domainName,
             data: {},
             async: false,
             dataType: "json",

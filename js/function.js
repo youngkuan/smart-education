@@ -119,6 +119,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         /**
          * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
          */
+        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames[0]);
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
@@ -222,7 +223,6 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             console.log('获取分面出错...');
         });
     }
-
 
     /**
      * 重新选择主题推荐方式时，查询推荐主题列表下所有碎片
