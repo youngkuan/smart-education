@@ -119,7 +119,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         /**
          * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
          */
-        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames[0]);
+
+        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topics[0]["topicName"]);
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
@@ -231,7 +232,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
         $http({
             url: ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNames",
-            method: 'get',
+            method: 'post',
             params: {
                 domainName: domainName,
                 topicNames: topicNames
