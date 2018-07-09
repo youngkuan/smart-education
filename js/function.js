@@ -546,8 +546,10 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     // click change facet color
     $scope.clickChangeColor = function(event){
         var id = event.target.getAttribute("id");
+        // console.log(id);
         $("div.list-group-item").css('background-color','#4682B4');
         $("#"+id).parent().css('background-color','blue');
+        $(document.getElementById(id)).parent().css('background-color','blue');
     };
     //angular end
 });

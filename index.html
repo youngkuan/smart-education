@@ -258,7 +258,7 @@
                     <div class=" list-group-item" style="background-color:#4682B4;">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
                       <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
                         ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
