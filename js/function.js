@@ -121,7 +121,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
          */
 
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topics[0]["topicName"]);
-        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
+        // $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
 
@@ -226,7 +226,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     }
 
     /**
-     * 重新选择主题推荐方式时，查询推荐主题列表下所有碎片
+     * 根据领域名和主题名，查询碎片
      */
     $scope.getAssemblesByDomainNameAndTopicNames = function (domainName, topicNames) {
 
@@ -238,12 +238,10 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 topicNames: topicNames
             }
         }).success(function (response) {
-            response = response["data"];
-            assembles = response;
-
-            $scope.assembles = [];
-            $scope.assembles = assembles[topics[0]["topicName"]];
-            $scope.assembleNumber = $scope.assembles.length;
+            assembles = response.data;
+            $scope.assembles = response.data[topicNames];
+            $scope.assembleNumber = ($scope.assembles == undefined ? 0 : $scope.assembles.length);
+            // console.log(response.data[topicNames]);
             /*assembleContent
             assembleText
             assembleScratchTime
@@ -277,8 +275,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.getAssemblesByTopicName = function (topicName) {
 
-        $scope.assembles = assembles[topicName];
-        $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
+        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicName);
+        // $scope.assembles = assembles[topicName];
+        // $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
     }
 
     /**
