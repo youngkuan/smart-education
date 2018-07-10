@@ -12,7 +12,8 @@ var CourseCode = "";
 // var studentCode = "1069800109030205";
 var studentCode = "";
 var coursewareid = "";
-var domainId = "1";
+// var domainId = "1";
+var domainId = '';
 var states = [];
 var learnt = 0;
 var learning = 0;
@@ -91,6 +92,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.isVideo = false;
     $scope.videourl = "";
     $scope.currTopicName = null;
+    $scope.currentFacetState = '';
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -264,12 +266,33 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     /**
      * update facets by click
      */
-    $scope.getFacetsByTopicNameThroughClick = function (topicName) {
+    $scope.getFacetsByTopicNameThroughClick = function (topicName,topicId) {
         $scope.clickfacets = facets[topicName];
         $scope.currentTopicName = topicName;
         $scope.currentFirstLayerFacetName = "";
         $scope.currentSecondLayerFacetName = "";
-    }
+        $scope.currentTopicId = topicId;
+        // console.log($scope.clickfacets);
+        $http({
+            url: ip_yotta + "/facetState/getByDomainIdAndTopicIdAndUserId",
+            method: 'get',
+            params:{
+                domainId: domainId,
+                topicId: topicId,
+                userId: studentCode,
+            }
+        }).success(function(response){
+            // console.log(response);
+            if(response.states == undefined) $scope.currentFacetState = '';
+            $scope.currentFacetState = response.data.states.split(',');
+            $scope.currentFacetState.forEach((state,index) =>{
+                $scope.clickfacets[index].state = state;
+            });
+            // console.log(response);
+            // console.log($scope.clickfacets);
+        });
+    };
+
     /**
      * 点击某一推荐主题，查询碎片
      */
@@ -527,6 +550,15 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 return {"background-color": "#008000"};
         }
     };
+    // update facet color
+    $scope.updateFacetColor = function(state){
+        switch(state){
+            case '0':
+                return {"background-color": "#848484"};
+            case '1':
+                return {"background-color": "#008000"};
+        }
+    };
 
     // disable rec 
     $scope.disableRecForNewbie = function(recname){
@@ -547,9 +579,38 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.clickChangeColor = function(event){
         var id = event.target.getAttribute("id");
         // console.log(id);
-        $("div.list-group-item").css('background-color','#4682B4');
-        $("#"+id).parent().css('background-color','blue');
-        $(document.getElementById(id)).parent().css('background-color','blue');
+        // console.log($("div.list-group-item.firstlayer"));
+
+        $http({
+            url: ip_yotta + "/facetState/getByDomainIdAndTopicIdAndUserId",
+            method: 'get',
+            params:{
+                domainId: domainId,
+                topicId: $scope.currentTopicId,
+                userId: studentCode,
+            }
+        }).success(function(response){
+            // console.log(response);
+            if(response.states == undefined) $scope.currentFacetState = '';
+            $scope.currentFacetState = response.data.states.split(',');
+            $("div.list-group-item.firstlayer").each(function(index,element){
+            
+                switch($scope.currentFacetState[index]){
+                    case '0':
+                        $(this).parent().find('div.list-group-item').css('background-color','#848484');
+                        // $(this).css('background-color','#848484');
+                        break;
+                    case '1':
+                        $(this).parent().find('div.list-group-item').css('background-color','#008000');
+                        // $(this).css('background-color','#008000');
+                        break;
+                    }
+            });
+            $("#"+id).parent().css('background-color','blue');
+            $(document.getElementById(id)).parent().css('background-color','blue');
+            // console.log(response);
+            // console.log($scope.clickfacets);
+        });
     };
     //angular end
 });

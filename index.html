@@ -183,7 +183,7 @@
                       <div class="btn-group dropdown" ng-if="states != null">
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
-                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
+                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName,topic.topicId);getAssemblesByTopicName(topic.topicName);showdropdown = false;
                           post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="updateBackColor(topic.state)">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
@@ -201,9 +201,6 @@
                               <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{topic.state}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                                   ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
-                                <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
-                                  style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
-                                  ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
                               </div>
                             </ul>
                       </div>
@@ -255,7 +252,7 @@
               <div id="facetClassDiv" class="box-body">
                 <ul class="list-group" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
                   <li class=" list-group-item" ng-repeat="firstLayerFacet in clickfacets " style="background-color: white">
-                    <div class=" list-group-item" style="background-color:#4682B4;">
+                    <div class=" list-group-item firstlayer" style="background-color:#4682B4;" ng-style="updateFacetColor(firstLayerFacet.state);">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                               ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
@@ -266,15 +263,12 @@
                     </div>
                     <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                       ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets" style="margin-left: 40px;margin-bottom: 0px">
-                      <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
+                      <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;" ng-style="updateFacetColor(firstLayerFacet.state);">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                           ng-click="clickChangeColor($event);getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
                           post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                                   ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>
-                        <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
-                          style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
-                          ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
                       </div>
                     </ul>
                   </li>
