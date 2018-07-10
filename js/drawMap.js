@@ -19,7 +19,7 @@ function init() {
             // old api
             // url:  ip + "/AssembleAPI/getTreeByDomain?ClassName=" + domainName,
             // new api:
-            url: ip + "/topic/getFirstTopicByDomianName?domainName=" + domainName,
+            url: ip + "/topic/getFirstTopicByDomainName?domainName=" + domainName,
             data: {},
             async: false,
             dataType: "json",
@@ -67,7 +67,7 @@ function init() {
                         var tree0 = buildTree(data, seed0, multiple);
                         draw_tree(tree0, seed0, svg, multiple);
                     });
-                })
+                });
 
                 /*****************************************************/
             }

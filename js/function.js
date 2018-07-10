@@ -25,7 +25,8 @@ var willlearn = 0;
 
 // angularjs控制
 var app = angular.module('app', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngSanitize'
 ]);
 app.controller('yangkuanController', function ($scope, $http, $sce) {
 
@@ -61,9 +62,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      */
     $scope.recnames = [
         "最短学习路径",
-        "补漏学习路径",
-        "补全学习路径",
-        "热度学习路径"
+        "热度学习路径",
+        "有效学习路径",
+        "补全学习路径"
     ];
     $scope.currTopics = [];
     $scope.recarrays = [];
@@ -118,25 +119,14 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         /**
          * 页面加载时根据课程名及默认推荐主题列表，查询该主题下所有碎片
          */
+
+        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topics[0]["topicName"]);
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
 
-        // $scope.updateState();
-        //get states
-        $http({
-            url: ip_yotta + "/state/getByDomainIdAndUserId",
-            method: 'get',
-            params: {
-                domainId: domainId,
-                userId: studentCode
-            }
-        }).success(function (response) {
-            $scope.states = response.data.states.split(',');
-            states = $scope.states;
-        }).error(function (response) {
+        $scope.updateState();
 
-        });
 
         //get rec
         // $http({
@@ -235,7 +225,6 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         });
     }
 
-
     /**
      * 重新选择主题推荐方式时，查询推荐主题列表下所有碎片
      */
@@ -243,7 +232,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
         $http({
             url: ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNames",
-            method: 'get',
+            method: 'post',
             params: {
                 domainName: domainName,
                 topicNames: topicNames
@@ -501,12 +490,65 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             // async: false,
             dataType: "text",
             success: function (response) {
+                update_states();
+                //get states
+                $http({
+                    url: ip_yotta + "/topicState/getByDomainIdAndUserId",
+                    method: 'get',
+                    params: {
+                        domainId: domainId,
+                        userId: studentCode
+                    }
+                }).success(function (response) {
+                    $scope.states = response.data.states.split(',');
+                    states = $scope.states;
+                    for (var i = 0; i < topics.length - 1; i++) {
+                        topics[i].state = Number(states[i]);
+                    }
+                }).error(function (response) {
+
+                });
                 console.log("success update states");
             },
             error: function(response){
                 console.log("failed update states");
             }
         });
+    };
+
+    //update botton color
+    $scope.updateBackColor = function(state){
+        // console.log(state);
+        switch(state){
+            case 0:
+                return {"background-color": "#848484"};
+            case 1:
+                return {"background-color": "#DC143C"};
+            case 2:
+                return {"background-color": "#008000"};
+        }
+    };
+
+    // disable rec 
+    $scope.disableRecForNewbie = function(recname){
+        if(learnt + learning == 0){
+            if(recname == "有效学习路径" || recname == "补全学习路径"){
+                return true;
+            }
+        }
+        return false;
+    };
+
+    // delete 'file:///...png' in assemble
+    $scope.deletePrefixWitheFile = function(content){
+        return content.replace(/file:.png/i,"");
+    };
+
+    // click change facet color
+    $scope.clickChangeColor = function(event){
+        var id = event.target.getAttribute("id");
+        $("div.list-group-item").css('background-color','#4682B4');
+        $("#"+id).parent().css('background-color','blue');
     };
     //angular end
 });
@@ -539,39 +581,51 @@ function parse_URL_params() {
             success: function (response) {
                 domainId = response.data.wiki.domainId;
                 domainName = response.data.wiki.domainName;
-                $.ajax({
-                    type: "GET",
-                    url: ip + "/state/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
-                    data: {},
-                    async: false,
-                    dataType: "json",
-                    success: function (response) {
-                        states = response.data.states.split(',');
-                        init();
-                        for (var i = 0; i < states.length; i++) {
-                            switch (states[i]) {
-                                case '2':
-                                    learnt++;
-                                    break;
-                                case '1':
-                                    learning++;
-                                    break;
-                                case '0':
-                                    willlearn++;
-                                    break;
-                            }
-                        }
-                        $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
-                        $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
-                        $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
-                        $('#sumtopic').html(states.length.toString());
-                    }
-                });
-
-
+                update_states();
             }
         });
 
 
     }
 }
+
+function update_states(){
+    $.ajax({
+        type: "GET",
+        url: ip + "/topicState/getByDomainIdAndUserId?domainId=" + domainId + "&userId=" + studentCode,
+        data: {},
+        async: false,
+        dataType: "json",
+        success: function (response) {
+            states = response.data.states.split(',');
+            init();
+            learnt = 0;
+            learning = 0;
+            willlearn = 0;
+            for (var i = 0; i < states.length; i++) {
+                switch (states[i]) {
+                    case '2':
+                        learnt++;
+                        break;
+                    case '1':
+                        learning++;
+                        break;
+                    case '0':
+                        willlearn++;
+                        break;
+                }
+            }
+            $('#learnt').html("&nbsp;&nbsp;已学习：" + learnt.toString());
+            $('#learning').html("&nbsp;&nbsp;正在学习：" + learning.toString());
+            $('#willlearn').html("&nbsp;&nbsp;未学习：" + willlearn.toString());
+            $('#sumtopic').html(states.length.toString());
+        }
+    });
+}
+$(document).ready(function(){
+    $('a').click(function(e) {
+        e.preventDefault();
+        $(this).parent().addClass('active').siblings().removeClass('active');
+        console.log(test);
+    });
+})
