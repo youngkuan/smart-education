@@ -304,7 +304,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * 点击某一推荐主题，查询碎片
      */
     $scope.getAssemblesByTopicName = function (topicName) {
-
+        $scope.hasVideo = false;
+        $scope.showVideo = false;
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicName);
         // $scope.assembles = assembles[topicName];
         // $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
@@ -314,6 +315,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * 点击某一推荐一级分面，查询碎片
      */
     $scope.getAssemblesByTopicNameAndFirstLayerFacetName = function (topicName, facetName) {
+        $scope.hasVideo = false;
+        $scope.showVideo = false;
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if (assemblesTmp == undefined) return;
@@ -334,6 +337,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * 点击某一推荐二级分面，查询碎片
      */
     $scope.getAssemblesByTopicNameAndsecondLayerFacetName = function (topicName, facetName, firstLayerFacetName) {
+        $scope.hasVideo = false;
+        $scope.showVideo = false;
         assemblesTmp = assembles[topicName];
         $scope.assembles = [];
         if (assemblesTmp == undefined) return;
