@@ -12,7 +12,8 @@ var CourseCode = "";
 // var studentCode = "1069800109030205";
 var studentCode = "";
 var coursewareid = "";
-var domainId = "1";
+// var domainId = "1";
+var domainId = '';
 var states = [];
 var learnt = 0;
 var learning = 0;
@@ -91,6 +92,11 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.isVideo = false;
     $scope.videourl = "";
     $scope.currTopicName = null;
+    $scope.currentFacetState = '';
+    $scope.textAssembles = [];
+    $scope.videoAssembles = [];
+    $scope.hasVideo = false;
+    $scope.showVideo = false;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -121,7 +127,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
          */
 
         $scope.getAssemblesByDomainNameAndTopicNames(domainName, topics[0]["topicName"]);
-        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
+        // $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicNames);
         $scope.isCollapsed = true;
         $scope.isCollapsedchildren = true;
 
@@ -174,8 +180,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
                     });
                     $scope.recarrays.push(recarray);
-                    $scope.currTopics = $scope.recarrays[0];
                 });
+                // console.log($scope.recarrays);
+                $scope.currTopics = $scope.recarrays[0];
             }
         });
     }, function errorCallback(response) {
@@ -226,7 +233,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     }
 
     /**
-     * 重新选择主题推荐方式时，查询推荐主题列表下所有碎片
+     * 根据领域名和主题名，查询碎片
      */
     $scope.getAssemblesByDomainNameAndTopicNames = function (domainName, topicNames) {
 
@@ -238,12 +245,12 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 topicNames: topicNames
             }
         }).success(function (response) {
-            response = response["data"];
-            assembles = response;
-
-            $scope.assembles = [];
-            $scope.assembles = assembles[topics[0]["topicName"]];
-            $scope.assembleNumber = $scope.assembles.length;
+            assembles = response.data;
+            $scope.assembles = response.data[topicNames];
+            $scope.assembleNumber = ($scope.assembles == undefined ? 0 : $scope.assembles.length);
+            $scope.classifierAssembles(assembles);
+            $scope.currentTopicName = topicNames;
+            // console.log(response.data[topicNames]);
             /*assembleContent
             assembleText
             assembleScratchTime
@@ -266,19 +273,41 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     /**
      * update facets by click
      */
-    $scope.getFacetsByTopicNameThroughClick = function (topicName) {
+    $scope.getFacetsByTopicNameThroughClick = function (topicName,topicId) {
         $scope.clickfacets = facets[topicName];
         $scope.currentTopicName = topicName;
         $scope.currentFirstLayerFacetName = "";
         $scope.currentSecondLayerFacetName = "";
-    }
+        $scope.currentTopicId = topicId;
+        // console.log($scope.clickfacets);
+        $http({
+            url: ip_yotta + "/facetState/getByDomainIdAndTopicIdAndUserId",
+            method: 'get',
+            params:{
+                domainId: domainId,
+                topicId: topicId,
+                userId: studentCode,
+            }
+        }).success(function(response){
+            // console.log(response);
+            if(response.states == undefined) $scope.currentFacetState = '';
+            $scope.currentFacetState = response.data.states.split(',');
+            $scope.currentFacetState.forEach((state,index) =>{
+                $scope.clickfacets[index].state = state;
+            });
+            // console.log(response);
+            // console.log($scope.clickfacets);
+        });
+    };
+
     /**
      * 点击某一推荐主题，查询碎片
      */
     $scope.getAssemblesByTopicName = function (topicName) {
 
-        $scope.assembles = assembles[topicName];
-        $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
+        $scope.getAssemblesByDomainNameAndTopicNames(domainName, topicName);
+        // $scope.assembles = assembles[topicName];
+        // $scope.assembleNumber = ($scope.assembles == undefined) ? 0 : $scope.assembles.length;
     }
 
     /**
@@ -298,7 +327,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.currentFirstLayerFacetName = facetName;
         $scope.currentSecondLayerFacetName = "";
         $scope.assembleNumber = $scope.assembles.length;
-    }
+        $scope.classifierAssemblesWithoutTopicName($scope.assembles);
+    };
 
     /**
      * 点击某一推荐二级分面，查询碎片
@@ -317,7 +347,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.currentFirstLayerFacetName = firstLayerFacetName;
         $scope.currentSecondLayerFacetName = facetName;
         $scope.assembleNumber = $scope.assembles.length;
-    }
+        $scope.classifierAssemblesWithoutTopicName($scope.assembles);
+    };
 
     /**
      * 点击某一主题推荐方式
@@ -328,7 +359,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             case '最短学习路径':
                 $scope.currTopics = $scope.recarrays[0];
                 break;
-            case '补漏学习路径':
+            case '有效学习路径':
                 $scope.currTopics = $scope.recarrays[1];
                 break;
             case '补全学习路径':
@@ -450,15 +481,70 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }
     };
 
+    // extract url from assemble
+    $scope.extractVideoUrl = function(text){
+        var pattern = new RegExp("http.*mp4");
+        return pattern.exec(text)[0];
+        // console.log(text);
+    };
+
+    // classifier assemble (assembleS has topicname)
+    $scope.classifierAssembles = function(assembleS){
+        if(assembleS[$scope.currentTopicName] == undefined) return;
+        $scope.videoAssembles = [];
+        $scope.textAssembles = [];
+        var pattern = new RegExp("http.*mp4");
+        assembleS[$scope.currentTopicName].forEach(function(element,index){
+            if (pattern.exec(element.assembleText)){
+                $scope.videoAssembles.push(element);
+            } else {
+                $scope.textAssembles.push(element);
+            }
+        });
+        $scope.assembles = $scope.textAssembles;
+        $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
+    };
+
+    // classifier assemble (assembleS without topicname)
+    $scope.classifierAssemblesWithoutTopicName = function(assembleS){
+        if(assembleS == undefined) return;
+        $scope.videoAssembles = [];
+        $scope.textAssembles = [];
+        var pattern = new RegExp("http.*mp4");
+        assembleS.forEach(function(element,index){
+            if (pattern.exec(element.assembleText)){
+                $scope.videoAssembles.push(element);
+            } else {
+                $scope.textAssembles.push(element);
+            }
+        });
+        $scope.assembles = $scope.textAssembles;
+        $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
+    };
+
+    // click change assemble
+    $scope.changeAssemble = function(vt){
+        switch(vt){
+            case "video":
+                $scope.assembles = $scope.videoAssembles;
+                $scope.showVideo = true;
+                break;
+            case "text":
+                $scope.assembles = $scope.textAssembles;
+                $scope.showVideo = false;
+                break;
+        }
+    };
+
     $scope.trustSrc = function (url) {
         return $sce.trustAsResourceUrl(url);
-    }
+    };
 
     /**
      * 暂停视频播放
      */
     $scope.pauseVideo = function () {
-        console.log("pause");
+        // console.log("pause");
         var video = document.querySelectorAll("video");
         for (var i = 0; i < video.length; i++) {
             video[i].pause();
@@ -528,6 +614,15 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 return {"background-color": "#008000"};
         }
     };
+    // update facet color
+    $scope.updateFacetColor = function(state){
+        switch(state){
+            case '0':
+                return {"background-color": "#848484"};
+            case '1':
+                return {"background-color": "#008000"};
+        }
+    };
 
     // disable rec 
     $scope.disableRecForNewbie = function(recname){
@@ -539,16 +634,48 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         return false;
     };
 
-    // delete 'file:///...png' in assemble
-    $scope.deletePrefixWitheFile = function(content){
-        return content.replace(/file:.png/i,"");
-    };
-
     // click change facet color
     $scope.clickChangeColor = function(event){
         var id = event.target.getAttribute("id");
-        $("div.list-group-item").css('background-color','#4682B4');
-        $("#"+id).parent().css('background-color','blue');
+        // console.log(id);
+        // console.log($("div.list-group-item.firstlayer"));
+
+        $http({
+            url: ip_yotta + "/facetState/getByDomainIdAndTopicIdAndUserId",
+            method: 'get',
+            params:{
+                domainId: domainId,
+                topicId: $scope.currentTopicId,
+                userId: studentCode,
+            }
+        }).success(function(response){
+            // console.log(response);
+            if(response.states == undefined) $scope.currentFacetState = '';
+            $scope.currentFacetState = response.data.states.split(',');
+            $("div.list-group-item.firstlayer").each(function(index,element){
+            
+                switch($scope.currentFacetState[index]){
+                    case '0':
+                        $(this).parent().find('div.list-group-item').css('background-color','#848484');
+                        // $(this).css('background-color','#848484');
+                        break;
+                    case '1':
+                        $(this).parent().find('div.list-group-item').css('background-color','#008000');
+                        // $(this).css('background-color','#008000');
+                        break;
+                    }
+            });
+            $("#"+id).parent().css('background-color','blue');
+            $(document.getElementById(id)).parent().css('background-color','blue');
+            // console.log(response);
+            // console.log($scope.clickfacets);
+        });
+    };
+
+    // generate video capture url
+    $scope.generateCaptureUrl = function(url){
+        var tag = url.split('_')[0].split('/').pop();
+        return url.split(tag)[0] + 'thumb/' + tag + '.jpg';
     };
     //angular end
 });
@@ -622,10 +749,10 @@ function update_states(){
         }
     });
 }
-$(document).ready(function(){
-    $('a').click(function(e) {
-        e.preventDefault();
-        $(this).parent().addClass('active').siblings().removeClass('active');
-        console.log(test);
-    });
-})
+// $(document).ready(function(){
+//     $('a').click(function(e) {
+//         e.preventDefault();
+//         $(this).parent().addClass('active').siblings().removeClass('active');
+//         console.log(test);
+//     });
+// })

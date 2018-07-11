@@ -183,7 +183,7 @@
                       <div class="btn-group dropdown" ng-if="states != null">
                         <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
                           ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
-                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName);getAssemblesByTopicName(topic.topicName);showdropdown = false;
+                          ng-click="getFacetsByTopicNameThroughClick(topic.topicName,topic.topicId);getAssemblesByTopicName(topic.topicName);showdropdown = false;
                           post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="updateBackColor(topic.state)">
                           {{topic.topicName.split(" ")[0]}}
                           </button>
@@ -201,9 +201,6 @@
                               <div class="list-group-item " style="margin:2px 0;" ng-style="backcolor[{{topic.state}}]">
                                 <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                                   ng-click="">{{secondLayerFacet.secondLayerFacetName}}</a>
-                                <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
-                                  style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
-                                  ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
                               </div>
                             </ul>
                       </div>
@@ -255,10 +252,10 @@
               <div id="facetClassDiv" class="box-body">
                 <ul class="list-group" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
                   <li class=" list-group-item" ng-repeat="firstLayerFacet in clickfacets " style="background-color: white">
-                    <div class=" list-group-item" style="background-color:#4682B4;">
+                    <div class=" list-group-item firstlayer" style="background-color:#4682B4;" ng-style="updateFacetColor(firstLayerFacet.state);">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
                       <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
                         ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
@@ -266,15 +263,12 @@
                     </div>
                     <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
                       ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets" style="margin-left: 40px;margin-bottom: 0px">
-                      <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;">
+                      <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;" ng-style="updateFacetColor(firstLayerFacet.state);">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                           ng-click="clickChangeColor($event);getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
                           post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                                   ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>
-                        <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}__a class="fa fa-fw fa-chevron-left"
-                          style="float:right;color:white;cursor:pointer" ng-click="isCollapsedchildren = !isCollapsedchildren;"
-                          ng-hide="secondLayerFacet.thirdLayerFacets.length==0"></a>
                       </div>
                     </ul>
                   </li>
@@ -288,21 +282,28 @@
             <div class="box box-primary" style="margin-bottom:2px;">
               <!-- 此处是碎片信息 -->
               <div class="box-header with-border">
-                <h4><b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4>
-                <!-- <p>问题数量：</p> -->
+                <!-- <h4><b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4> -->
+                <nav class="navbar navbar-default" role="navigation" style="margin: 0;background-color: white;border: 0;">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <a class="navbar-brand" href="#" style="color: black;">{{currentTopicName}}</a>
+                    </div>
+                    <div>
+                      <ul class="nav navbar-nav">
+                        <li ng-if="hasVideo"><a ng-click="changeAssemble('video')">视频</a></li>
+                        <li><a ng-click="changeAssemble('text')">富文本</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
               </div>
             </div>
             <div style="overflow:auto; height:600px;">
 
-              <div class="box box-solid" ng-repeat="assemble in assembles">
-                <!-- <div class="box box-solid box-primary" ng-repeat="fragment in fragments"> -->
-                <!-- <div class="box box-solid box-success" ng-repeat="fragment in fragments"> -->
-                <!-- <div class="box box-solid box-warning" ng-repeat="fragment in fragments"> -->
-
-                <!-- 问题碎片的主题、分面和数据源信息 -->
+              <div ng-if="showVideo == false" class="box box-solid" ng-repeat="assemble in assembles" style="margin-bottom: 10px;">
+                <!-- 碎片的主题、分面和数据源信息 -->
                 <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
-
-                  <!-- 问题碎片的主题、分面和数据源信息 -->
+                  <!-- 碎片的主题、分面和数据源信息 -->
                   <h1 class="box-title">
                     <small>
                       分面:
@@ -316,27 +317,14 @@
 
                     </small>
                   </h1>
-                  <!-- 缩放按钮 -->
-                  <!--                           <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip">
-                              <i class="fa fa-minus"></i>
-                            </button>
-                          </div> -->
                 </div>
-
                 <div class="box-body" style="height: 70px; overflow: hidden;">
-                  <!-- <div ng-if="assemble.assembleText.length < 220"> -->
-
-                  <!-- 问题正文 -->
                   <!-- 超过两行隐藏并添加省略号 -->
                   <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;"
                     ng-bind="assemble.assembleText">
-
                   </p>
-
                 </div>
                 <!-- /.box-body -->
-
                 <div class="box-footer" style="text-align: center;">
                   <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal" data-backdrop="static" data-keyboard="false" ng-click="videoOrNot(assemble.assembleText)">
                     <i class="fa fa-fw fa-angle-double-down" ng-click="post_log_of_mouseclick_assemble('学习页面',assemble.topicName,assemble.topicId,
@@ -347,30 +335,22 @@
                   <div class="modal-dialog" style="width: 1000px">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button> -->
                         <h4 class="modal-title">
                           <b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
                           <small>
-                            <!-- 分面:
-                            <span class="badge bg-purple">
-                              <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
-                            </span> -->
                             &nbsp;&nbsp;&nbsp; 数据源:
                             <span class="badge bg-yellow">
                               <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                             </span>
-
                           </small>
                         </h4>
                       </div>
                       <div ng-if="! isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
-                        <p style="width: 100%;height: auto;word-wrap:break-word;word-break:break-all;overflow: hidden;" ng-bind-html="deletePrefixWitheFile(assemble.assembleContent)"></p>
+                        <p style="width: 100%;height: auto;word-wrap:break-word;word-break:break-all;overflow: hidden;" ng-bind-html="assemble.assembleContent"></p>
                         <!-- <p>{{assemble.assembleText}}</p> -->
                       </div>
                       <div ng-if="isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
-                        <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls"></video>
+                        <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(videourl)}}"></video>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo();updateState();" data-dismiss="modal">Close</button>
@@ -382,6 +362,30 @@
                 </div>
                 <!-- /.modal -->
               </div>
+
+              <div ng-if="showVideo" class="box box-solid" ng-repeat="assemble in assembles" style="margin-bottom: 10px;">
+                  <!-- 碎片的主题、分面和数据源信息 -->
+                  <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
+                    <!-- 碎片的主题、分面和数据源信息 -->
+                    <h1 class="box-title">
+                      <small>
+                        分面:
+                        <span class="badge bg-purple">
+                          <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
+                        </span>
+                        &nbsp;&nbsp;&nbsp; 数据源:
+                        <span class="badge bg-yellow">
+                          <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
+                        </span>
+  
+                      </small>
+                    </h1>
+                  </div>
+                  <div class="box-body" style="width: 50%; overflow: hidden;margin: auto;" >
+                      <video ng-src="{{trustSrc(extractVideoUrl(assemble.assembleText))}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(extractVideoUrl(assemble.assembleText))}}"></video>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
             </div>
 
           </div>
