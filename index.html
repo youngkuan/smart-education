@@ -300,11 +300,9 @@
             </div>
             <div style="overflow:auto; height:600px;">
 
-              <div class="box box-solid" ng-repeat="assemble in assembles">
-
+              <div ng-if="showVideo == false" class="box box-solid" ng-repeat="assemble in assembles" style="margin-bottom: 10px;">
                 <!-- 碎片的主题、分面和数据源信息 -->
                 <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
-
                   <!-- 碎片的主题、分面和数据源信息 -->
                   <h1 class="box-title">
                     <small>
@@ -320,17 +318,13 @@
                     </small>
                   </h1>
                 </div>
-
                 <div class="box-body" style="height: 70px; overflow: hidden;">
                   <!-- 超过两行隐藏并添加省略号 -->
                   <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;"
                     ng-bind="assemble.assembleText">
-
                   </p>
-
                 </div>
                 <!-- /.box-body -->
-
                 <div class="box-footer" style="text-align: center;">
                   <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal" data-backdrop="static" data-keyboard="false" ng-click="videoOrNot(assemble.assembleText)">
                     <i class="fa fa-fw fa-angle-double-down" ng-click="post_log_of_mouseclick_assemble('学习页面',assemble.topicName,assemble.topicId,
@@ -348,7 +342,6 @@
                             <span class="badge bg-yellow">
                               <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                             </span>
-
                           </small>
                         </h4>
                       </div>
@@ -369,6 +362,30 @@
                 </div>
                 <!-- /.modal -->
               </div>
+
+              <div ng-if="showVideo" class="box box-solid" ng-repeat="assemble in assembles" style="margin-bottom: 10px;">
+                  <!-- 碎片的主题、分面和数据源信息 -->
+                  <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
+                    <!-- 碎片的主题、分面和数据源信息 -->
+                    <h1 class="box-title">
+                      <small>
+                        分面:
+                        <span class="badge bg-purple">
+                          <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
+                        </span>
+                        &nbsp;&nbsp;&nbsp; 数据源:
+                        <span class="badge bg-yellow">
+                          <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
+                        </span>
+  
+                      </small>
+                    </h1>
+                  </div>
+                  <div class="box-body" style="width: 50%; overflow: hidden;margin: auto;" >
+                      <video ng-src="{{trustSrc(extractVideoUrl(assemble.assembleText))}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(extractVideoUrl(assemble.assembleText))}}"></video>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
             </div>
 
           </div>

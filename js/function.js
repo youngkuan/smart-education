@@ -96,6 +96,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.textAssembles = [];
     $scope.videoAssembles = [];
     $scope.hasVideo = false;
+    $scope.showVideo = false;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -326,7 +327,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.currentFirstLayerFacetName = facetName;
         $scope.currentSecondLayerFacetName = "";
         $scope.assembleNumber = $scope.assembles.length;
-    }
+        $scope.classifierAssemblesWithoutTopicName($scope.assembles);
+    };
 
     /**
      * 点击某一推荐二级分面，查询碎片
@@ -345,7 +347,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         $scope.currentFirstLayerFacetName = firstLayerFacetName;
         $scope.currentSecondLayerFacetName = facetName;
         $scope.assembleNumber = $scope.assembles.length;
-    }
+        $scope.classifierAssemblesWithoutTopicName($scope.assembles);
+    };
 
     /**
      * 点击某一主题推荐方式
@@ -478,7 +481,14 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }
     };
 
-    // classifier assemble
+    // extract url from assemble
+    $scope.extractVideoUrl = function(text){
+        var pattern = new RegExp("http.*mp4");
+        return pattern.exec(text)[0];
+        // console.log(text);
+    };
+
+    // classifier assemble (assembleS has topicname)
     $scope.classifierAssembles = function(assembleS){
         if(assembleS[$scope.currentTopicName] == undefined) return;
         $scope.videoAssembles = [];
@@ -491,11 +501,25 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.textAssembles.push(element);
             }
         });
+        $scope.assembles = $scope.textAssembles;
         $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
-        // console.log($scope.hasVideo);
-        // console.log(assembleS[$scope.currentTopicName]);
-        // console.log($scope.videoAssembles);
-        // console.log($scope.textAssembles);
+    };
+
+    // classifier assemble (assembleS without topicname)
+    $scope.classifierAssemblesWithoutTopicName = function(assembleS){
+        if(assembleS == undefined) return;
+        $scope.videoAssembles = [];
+        $scope.textAssembles = [];
+        var pattern = new RegExp("http.*mp4");
+        assembleS.forEach(function(element,index){
+            if (pattern.exec(element.assembleText)){
+                $scope.videoAssembles.push(element);
+            } else {
+                $scope.textAssembles.push(element);
+            }
+        });
+        $scope.assembles = $scope.textAssembles;
+        $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
     };
 
     // click change assemble
@@ -503,9 +527,11 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         switch(vt){
             case "video":
                 $scope.assembles = $scope.videoAssembles;
+                $scope.showVideo = true;
                 break;
             case "text":
                 $scope.assembles = $scope.textAssembles;
+                $scope.showVideo = false;
                 break;
         }
     };
@@ -518,7 +544,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
      * 暂停视频播放
      */
     $scope.pauseVideo = function () {
-        console.log("pause");
+        // console.log("pause");
         var video = document.querySelectorAll("video");
         for (var i = 0; i < video.length; i++) {
             video[i].pause();
