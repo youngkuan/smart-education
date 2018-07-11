@@ -93,6 +93,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.videourl = "";
     $scope.currTopicName = null;
     $scope.currentFacetState = '';
+    $scope.textAssembles = {};
+    $scope.videoAssembles = {};
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -243,6 +245,8 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             assembles = response.data;
             $scope.assembles = response.data[topicNames];
             $scope.assembleNumber = ($scope.assembles == undefined ? 0 : $scope.assembles.length);
+            $scope.classifierAssembles(assembles);
+            $scope.currentTopicName = topicNames;
             // console.log(response.data[topicNames]);
             /*assembleContent
             assembleText
@@ -472,9 +476,27 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }
     };
 
+    // classifier assemble
+    $scope.classifierAssembles = function(assembleS){
+        if(assembleS[$scope.currentTopicName] == undefined) return;
+        $scope.videoAssembles = [];
+        $scope.textAssembles = [];
+        var pattern = new RegExp("http.*mp4");
+        assembleS[$scope.currentTopicName].forEach(function(element,index){
+            if (pattern.exec(element.assembleText)){
+                $scope.videoAssembles.push(element);
+            } else {
+                $scope.textAssembles.push(element);
+            }
+        });
+        // console.log(assembleS[$scope.currentTopicName]);
+        console.log($scope.videoAssembles);
+        console.log($scope.textAssembles);
+    };
+
     $scope.trustSrc = function (url) {
         return $sce.trustAsResourceUrl(url);
-    }
+    };
 
     /**
      * 暂停视频播放
@@ -568,11 +590,6 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             }
         }
         return false;
-    };
-
-    // delete 'file:///...png' in assemble
-    $scope.deletePrefixWitheFile = function(content){
-        return content.replace(/file:.png/i,"");
     };
 
     // click change facet color
