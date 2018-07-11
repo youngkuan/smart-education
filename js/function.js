@@ -93,8 +93,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.videourl = "";
     $scope.currTopicName = null;
     $scope.currentFacetState = '';
-    $scope.textAssembles = {};
-    $scope.videoAssembles = {};
+    $scope.textAssembles = [];
+    $scope.videoAssembles = [];
+    $scope.hasVideo = false;
     /**
      * 页面加载时根据默认主题推荐方式及课程名，查询推荐主题
      */
@@ -489,9 +490,23 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                 $scope.textAssembles.push(element);
             }
         });
+        $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
+        console.log($scope.hasVideo);
         // console.log(assembleS[$scope.currentTopicName]);
         console.log($scope.videoAssembles);
         console.log($scope.textAssembles);
+    };
+
+    // click change assemble
+    $scope.changeAssemble = function(vt){
+        switch(vt){
+            case "video":
+                $scope.assembles = $scope.videoAssembles;
+                break;
+            case "text":
+                $scope.assembles = $scope.textAssembles;
+                break;
+        }
     };
 
     $scope.trustSrc = function (url) {
@@ -707,10 +722,10 @@ function update_states(){
         }
     });
 }
-$(document).ready(function(){
-    $('a').click(function(e) {
-        e.preventDefault();
-        $(this).parent().addClass('active').siblings().removeClass('active');
-        console.log(test);
-    });
-})
+// $(document).ready(function(){
+//     $('a').click(function(e) {
+//         e.preventDefault();
+//         $(this).parent().addClass('active').siblings().removeClass('active');
+//         console.log(test);
+//     });
+// })

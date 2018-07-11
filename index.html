@@ -282,21 +282,30 @@
             <div class="box box-primary" style="margin-bottom:2px;">
               <!-- 此处是碎片信息 -->
               <div class="box-header with-border">
-                <h4><b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4>
-                <!-- <p>问题数量：</p> -->
+                <!-- <h4><b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>碎片数量：{{ assembleNumber }}</h4> -->
+                <nav class="navbar navbar-default" role="navigation" style="margin: 0;background-color: white;border: 0;">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <a class="navbar-brand" href="#" style="color: black;">{{currentTopicName}}</a>
+                    </div>
+                    <div>
+                      <ul class="nav navbar-nav">
+                        <li ng-if="hasVideo"><a ng-click="changeAssemble('video')">视频</a></li>
+                        <li><a ng-click="changeAssemble('text')">富文本</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
               </div>
             </div>
             <div style="overflow:auto; height:600px;">
 
               <div class="box box-solid" ng-repeat="assemble in assembles">
-                <!-- <div class="box box-solid box-primary" ng-repeat="fragment in fragments"> -->
-                <!-- <div class="box box-solid box-success" ng-repeat="fragment in fragments"> -->
-                <!-- <div class="box box-solid box-warning" ng-repeat="fragment in fragments"> -->
 
-                <!-- 问题碎片的主题、分面和数据源信息 -->
+                <!-- 碎片的主题、分面和数据源信息 -->
                 <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
 
-                  <!-- 问题碎片的主题、分面和数据源信息 -->
+                  <!-- 碎片的主题、分面和数据源信息 -->
                   <h1 class="box-title">
                     <small>
                       分面:
@@ -310,18 +319,9 @@
 
                     </small>
                   </h1>
-                  <!-- 缩放按钮 -->
-                  <!--                           <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip">
-                              <i class="fa fa-minus"></i>
-                            </button>
-                          </div> -->
                 </div>
 
                 <div class="box-body" style="height: 70px; overflow: hidden;">
-                  <!-- <div ng-if="assemble.assembleText.length < 220"> -->
-
-                  <!-- 问题正文 -->
                   <!-- 超过两行隐藏并添加省略号 -->
                   <p style="display: -webkit-box;-webkit-line-clamp:2;-webkit-box-orient: vertical;line-height: 30px;font-size: 20px;height: 60px;overflow: hidden;"
                     ng-bind="assemble.assembleText">
@@ -341,16 +341,9 @@
                   <div class="modal-dialog" style="width: 1000px">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button> -->
                         <h4 class="modal-title">
                           <b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
                           <small>
-                            <!-- 分面:
-                            <span class="badge bg-purple">
-                              <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
-                            </span> -->
                             &nbsp;&nbsp;&nbsp; 数据源:
                             <span class="badge bg-yellow">
                               <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
