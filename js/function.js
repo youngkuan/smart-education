@@ -179,8 +179,9 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
 
                     });
                     $scope.recarrays.push(recarray);
-                    $scope.currTopics = $scope.recarrays[0];
                 });
+                // console.log($scope.recarrays);
+                $scope.currTopics = $scope.recarrays[0];
             }
         });
     }, function errorCallback(response) {
@@ -355,7 +356,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             case '最短学习路径':
                 $scope.currTopics = $scope.recarrays[0];
                 break;
-            case '补漏学习路径':
+            case '有效学习路径':
                 $scope.currTopics = $scope.recarrays[1];
                 break;
             case '补全学习路径':
@@ -491,10 +492,10 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             }
         });
         $scope.hasVideo = ($scope.videoAssembles.length == 0  ? false : true);
-        console.log($scope.hasVideo);
+        // console.log($scope.hasVideo);
         // console.log(assembleS[$scope.currentTopicName]);
-        console.log($scope.videoAssembles);
-        console.log($scope.textAssembles);
+        // console.log($scope.videoAssembles);
+        // console.log($scope.textAssembles);
     };
 
     // click change assemble
