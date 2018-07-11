@@ -612,6 +612,12 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
             // console.log($scope.clickfacets);
         });
     };
+
+    // generate video capture url
+    $scope.generateCaptureUrl = function(url){
+        var tag = url.split('_')[0].split('/').pop();
+        return url.split(tag)[0] + 'thumb/' + tag + '.jpg';
+    };
     //angular end
 });
 

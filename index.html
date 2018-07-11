@@ -364,7 +364,7 @@
                         <!-- <p>{{assemble.assembleText}}</p> -->
                       </div>
                       <div ng-if="isVideo" class="modal-body" style="overflow: auto;line-height: 40px;font-size:25px;padding-left: 20px;padding-right: 20px;">
-                        <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls"></video>
+                        <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(videourl)}}"></video>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo();updateState();" data-dismiss="modal">Close</button>
