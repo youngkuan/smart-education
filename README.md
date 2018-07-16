@@ -159,7 +159,7 @@ long domainId | String recommendationTopics | long userId
 
 > 保存推荐主题，参数
 
-long domainName | String recommendationTopics | long userId
+String domainName | String recommendationTopics | long userId
 ---|---|---
 课程名 | 推荐主题列表 | 用户id
 
@@ -188,8 +188,8 @@ modified_time | datetime | 1
 
 > 保存用户的碎片评价，参数
 
-long assembleId | long userId | integer value 
----|--- |--- |---
+long assembleId | long userId | integer value
+---|---|---
 碎片id | 用户id | 评价值
 
 ---
