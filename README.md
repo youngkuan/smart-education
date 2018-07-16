@@ -139,7 +139,7 @@ modified_time | datetime | 1
 - （1）recommendation_topics（推荐主题列表）形式：：推荐主题1 id，推荐主题2 id，推荐主题3 id；推荐主题3 id，推荐主题1 id，推荐主题4 id；……  
 即，不同推荐方式之间以分号隔开，同一推荐方式内的主题id以逗号分隔开
 
-##### 2.  **2.	推荐主题接口**  
+##### 2.  **推荐主题接口**  
 
 - （1）	recommendation/getByDomainIdAndUserId
 
@@ -162,5 +162,34 @@ long domainId | String recommendationTopics | long userId
 long domainName | String recommendationTopics | long userId
 ---|---|---
 课程名 | 推荐主题列表 | 用户id
+
+---
+
+### 碎片评价
+
+##### 1. **碎片评价表**
+
+列名 | 类型 | 长度
+---|---|---
+evaluation_id | bigint(long) | 20
+assemble_id | bigint(long) | 20
+value | integer | 11
+user_id | bigint(long) | 20
+created_time | datetime | 1
+modified_time | datetime | 1
+
+> 说明：
+
+- （1）value 记录的是对应用户（user_id）在对应碎片（assemble_id）下的评价值，目前记录两个评价值（赞/踩），其中赞值为1，踩值为0.
+
+##### 2.  **碎片评价接口**  
+
+- （1）	evaluation/saveAssembleQuality
+
+> 保存用户的碎片评价，参数
+
+long assembleId | long userId | integer value 
+---|--- |--- |---
+碎片id | 用户id | 评价值
 
 ---
