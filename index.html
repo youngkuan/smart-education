@@ -192,7 +192,7 @@
                             <div class=" list-group-item" ng-style="backcolor[{{topic.state}}]">
                               <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
-                              <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
+                              <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-down" style="float:right;color:white;cursor:pointer"
                                 ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
                               </a>
                             </div>
@@ -257,8 +257,11 @@
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
                               ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
-                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
-                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-right" style="float:right;color:white;cursor:pointer"
+                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0 || !isCollapsed">
+                      </a>
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-down" style="float:right;color:white;cursor:pointer"
+                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0 || isCollapsed">
                       </a>
                     </div>
                     <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
