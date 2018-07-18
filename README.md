@@ -146,8 +146,9 @@ modified_time | datetime | 1
 > 查询推荐主题，参数
 
 long domainId | long userId 
----|--- |---
+---|---
 课程id | 用户id
+
 - （2）	recommendation/saveRecommendationByDomainIdAndUserId
 
 > 保存推荐主题，参数
@@ -180,11 +181,11 @@ modified_time | datetime | 1
 
 > 说明：
 
-- （1）value 记录的是对应用户（user_id）在对应碎片（assemble_id）下的评价值，目前记录两个评价值（赞/踩），其中赞值为1，踩值为0.
+- value 记录的是对应用户（user_id）在对应碎片（assemble_id）下的评价值，目前记录两个评价值（赞/踩），其中赞值为1，踩值为-1.
 
 ##### 2.  **碎片评价接口**  
 
-- （1）	evaluation/saveAssembleQuality
+- （1）evaluation/saveAssembleEvaluation
 
 > 保存用户的碎片评价，参数
 
