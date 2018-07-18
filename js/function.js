@@ -670,7 +670,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                         break;
                     }
             });
-            $("#"+id).parent().css('background-color','blue');
+            // $("#"+id).parent().css('background-color','blue');
             $(document.getElementById(id)).parent().css('background-color','blue');
             // console.log(response);
             // console.log($scope.clickfacets);
@@ -681,6 +681,45 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.generateCaptureUrl = function(url){
         var tag = url.split('_')[0].split('/').pop();
         return url.split(tag)[0] + 'thumb/' + tag + '.jpg';
+    };
+
+    // set assemble evaluation
+    $scope.saveAssembleEvaluation = function(assembleid,value,event){
+        $http({
+            url: ip_yotta + "/evaluation/saveAssembleEvaluation",
+            method: 'get',
+            params:{
+                userId: studentCode,
+                assembleId: assembleid,
+                value: value
+            }
+        }).success(function(response){
+            console.log(response.msg + " " + response.data);
+            // console.log(event);
+            var id = event.target.getAttribute("id").split('_')[1];
+            // console.log(id);
+            if(event.target.getAttribute("id").split('_').pop() == 'm'){
+                if(value == 1){
+                    $('#e_' + id + '_negative_m').removeClass('is-active');
+                    $('#e_' + id + '_positive_m').addClass('is-active');
+                }else{
+                    $('#e_' + id + '_negative_m').addClass('is-active');
+                    $('#e_' + id + '_positive_m').removeClass('is-active');
+                }
+            }else{
+                if(value == 1){
+                    $('#e_' + id + '_negative').removeClass('is-active');
+                    $('#e_' + id + '_positive').addClass('is-active');
+                }else{
+                    $('#e_' + id + '_negative').addClass('is-active');
+                    $('#e_' + id + '_positive').removeClass('is-active');
+                }
+            }
+
+            
+        }).error(function(response){
+            console.log(response);
+        });
     };
     //angular end
 });
