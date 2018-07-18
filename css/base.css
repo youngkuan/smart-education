@@ -60,3 +60,40 @@ div.modal-body pre {
 	font-size: 18px;
 	white-space: pre-wrap;
 }
+
+.VoteButton {
+    padding: 0 10px;
+    color: #0084ff;
+    background: rgba(0,132,255,.1);
+    border-color: transparent
+}
+
+.VoteButton:not(:disabled):hover {
+    background-color: rgba(0,132,255,.15)
+}
+
+.VoteButton.is-active {
+    color: #fff;
+    background: #0084ff
+}
+
+.VoteButton.is-active:hover {
+    background-color: #0084ff
+}
+
+.Button:focus {
+    outline: none
+}
+
+.Button {
+    display: inline-block;
+    padding: 0 16px;
+    font-size: 14px;
+    line-height: 32px;
+    color: #8590a6;
+    text-align: center;
+    cursor: pointer;
+    background: none;
+    border: 1px solid;
+    border-radius: 3px
+}
