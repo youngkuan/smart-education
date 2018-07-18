@@ -303,7 +303,6 @@
                         <li ng-if="hasVideo">
                           <a ng-click="changeAssemble('video')">视频</a>
                         </li>
-
                       </ul>
                     </div>
                   </div>
@@ -327,14 +326,14 @@
                         <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                       </span>&nbsp;&nbsp;&nbsp;
                       <span>
-                        <button id="e_{{ assemble.assembleId }}_positive" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble.assembleId, 1 , $event);">
-                          <span style="display: inline-flex; align-items: center;">​
+                        <button id="e_{{ assemble.assembleId }}_positive" type="button" ng-class="assemble.evaluation == 1 ? 'is-active' : null" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_positive_s" style="display: inline-flex; align-items: center;">​
                             <i id="e_{{ assemble.assembleId }}_positive_i" class="fa fa-thumbs-up"></i>
                           </span>
                           {{assemble.positive}}
                         </button>
-                        <button id="e_{{ assemble.assembleId }}_negative" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble.assembleId, -1 , $event);">
-                          <span style="display: inline-flex; align-items: center;">​
+                        <button id="e_{{ assemble.assembleId }}_negative" type="button" ng-class="assemble.evaluation == -1 ? 'is-active' : null" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_negative_s" style="display: inline-flex; align-items: center;">​
                             <i id="e_{{ assemble.assembleId }}_negative_i" class="fa fa-thumbs-down"></i>
                           </span>
                           {{assemble.negative}}
@@ -385,14 +384,14 @@
                         <button type="button" class="btn btn-default pull-left" style="margin-right: 10px;" ng-click="pauseVideo();updateState();" data-dismiss="modal">关闭</button>
 
 
-                          <button id="e_{{ assemble.assembleId }}_positive_m" style="margin-right: 6px;" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble.assembleId, 1 , $event);">
-                            <span style="display: inline-flex; align-items: center;">​
+                          <button id="e_{{ assemble.assembleId }}_positive_m" ng-class="assemble.evaluation == 1 ? 'is-active' : null" style="margin-right: 6px;" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                            <span id="e_{{ assemble.assembleId }}_positive_s_m" style="display: inline-flex; align-items: center;">​
                               <i id="e_{{ assemble.assembleId }}_positive_i_m" class="fa fa-thumbs-up"></i>
                             </span>
                             {{assemble.positive}}
                           </button>
-                          <button id="e_{{ assemble.assembleId }}_negative_m" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble.assembleId, -1 , $event);">
-                            <span style="display: inline-flex; align-items: center;">​
+                          <button id="e_{{ assemble.assembleId }}_negative_m" ng-class="assemble.evaluation == -1 ? 'is-active' : null" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                            <span id="e_{{ assemble.assembleId }}_negative_s_m" style="display: inline-flex; align-items: center;">​
                               <i id="e_{{ assemble.assembleId }}_negative_i_m" class="fa fa-thumbs-down"></i>
                             </span>
                             {{assemble.negative}}
@@ -422,14 +421,14 @@
                         <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
                       </span>&nbsp;&nbsp;&nbsp;
                       <span>
-                        <button id="e_{{ assemble.assembleId }}_positive" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble.assembleId, 1 , $event);">
-                          <span style="display: inline-flex; align-items: center;">​
+                        <button id="e_{{ assemble.assembleId }}_positive" ng-class="assemble.evaluation == 1 ? 'is-active' : null" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_positive_s" style="display: inline-flex; align-items: center;">​
                             <i id="e_{{ assemble.assembleId }}_positive_i" class="fa fa-thumbs-up"></i>
                           </span>
                           {{assemble.positive}}
                         </button>
-                        <button id="e_{{ assemble.assembleId }}_negative" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble.assembleId, -1 , $event);">
-                          <span style="display: inline-flex; align-items: center;">​
+                        <button id="e_{{ assemble.assembleId }}_negative" ng-class="assemble.evaluation == -1 ? 'is-active' : null" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_negative_s" style="display: inline-flex; align-items: center;">​
                             <i id="e_{{ assemble.assembleId }}_negative_i" class="fa fa-thumbs-down"></i>
                           </span>
                           {{assemble.negative}}
