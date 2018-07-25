@@ -258,7 +258,7 @@
                     <div class=" list-group-item firstlayer" style="background-color:#4682B4;" ng-style="updateFacetColor(firstLayerFacet.state);">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;"
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);getAssemblesByDomainNameAndTopicNames(domainname,currentTopicName);" ng-dblclick="isCollapsed =!isCollapsed;"
                         style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
                       <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-right" style="float:right;color:white;cursor:pointer"
@@ -273,8 +273,7 @@
                       <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;" ng-style="updateFacetColor(firstLayerFacet.state);">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                           ng-click="clickChangeColor($event);getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
-                          post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
+                          post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);getAssemblesByDomainNameAndTopicNames(domainname,currentTopicName);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>
                       </div>
                     </ul>

@@ -262,7 +262,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }).error(function (response) {
             console.log('获取主题出错...');
         });
-    }
+    };
 
     /**
      * 点击某一推荐主题，查询分面
