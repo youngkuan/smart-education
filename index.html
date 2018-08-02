@@ -177,22 +177,23 @@
                       </button>
                     </div>
                     <!-- 四种推荐 -->
-                    <div class="col-md-2" ng-repeat="topic in (currTopics.length > 5 ? currTopics.slice(topicIndex,topicIndex+5) : currTopics) " style="padding-left: 0%">
-                    <!-- 所有主题推荐 -->
-                    <!-- <div class="col-md-2" ng-repeat="topic in (topics.length > 5 ? topics.slice(topicIndex,topicIndex+5) : topics) " style="padding-left: 0%"> -->
+                    <div class="col-md-2" ng-repeat="topic in (currTopics.length > 5 ? currTopics.slice(topicIndex,topicIndex+5) : currTopics) "
+                      style="padding-left: 0%">
+                      <!-- 所有主题推荐 -->
+                      <!-- <div class="col-md-2" ng-repeat="topic in (topics.length > 5 ? topics.slice(topicIndex,topicIndex+5) : topics) " style="padding-left: 0%"> -->
                       <div class="btn-group dropdown" ng-if="states != null">
-                        <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown" data-hover="dropdown"
-                          ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
+                        <button type="button" class="btn btn-primary btn-lg btn-arrow-right dropdown-toggle" data-boundary="viewport" data-toggle="dropdown"
+                          data-hover="dropdown" ng-mouseover="getFacetsByTopicName(topic.topicName);showdropdown=true" ng-mouseleave="showdropdown=false"
                           ng-click="getFacetsByTopicNameThroughClick(topic.topicName,topic.topicId);getAssemblesByTopicName(topic.topicName);showdropdown = false;
                           post_log_of_mouseover_topic('学习页面',topic.topicName,topic.topicId);updateState();" ng-style="updateBackColor(topic.state)">
                           {{topic.topicName.split(" ")[0]}}
-                          </button>
+                        </button>
                         <ul class="dropdown-menu" role="menu" ng-if="showdropdown" style="margin-top: 0px;width: 100%;padding: 0px;z-index: 800;">
                           <li class=" list-group-item" ng-repeat="firstLayerFacet in facets " style="background-color: white;padding: 0px">
                             <div class=" list-group-item" ng-style="backcolor[{{topic.state}}]">
                               <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                               </a>
-                              <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
+                              <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-down" style="float:right;color:white;cursor:pointer"
                                 ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
                               </a>
                             </div>
@@ -209,8 +210,8 @@
                     <div class="col-md-1" style="z-index: 100;">
                       <!-- 四种推荐 -->
                       <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= currTopics.length) ? topicIndex : topicIndex + 1">
-                      <!-- 所有主题推荐 -->
-                      <!-- <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= topics.length) ? topicIndex : topicIndex + 1"> -->
+                        <!-- 所有主题推荐 -->
+                        <!-- <button type="button" class="btn btn-primary btn-lg" style="width:100%" ng-click="topicIndex = ( topicIndex + 5 >= topics.length) ? topicIndex : topicIndex + 1"> -->
                         <i class="fa fa-angle-right"></i>
                       </button>
                     </div>
@@ -233,7 +234,8 @@
                     <button type="button" class="btn bg-purple btn-lg dropdown-toggle" data-toggle="dropdown">{{shownname}}</button>
                     <ul class="dropdown-menu" role="menu" style="margin-top: 0px;min-width: 100%">
                       <li ng-repeat="x in recnames" style="">
-                        <button type="button" style="background-color: white;width:100%;" class="dropdown-item btn btn-light" href="#" ng-disabled="disableRecForNewbie(x)" ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
+                        <button type="button" style="background-color: white;width:100%;" class="dropdown-item btn btn-light" href="#" ng-disabled="disableRecForNewbie(x)"
+                          ng-click="updateRecname(x);post_log_of_mouseclick_recommendation('学习页面',x)">{{x}}</a>
                       </li>
                     </ul>
                   </div>
@@ -247,7 +249,8 @@
             <!-- 此处是主题分面的信息 -->
             <div class="box box-primary" style="height: 100%;">
               <div class="box-header with-border">
-                <h3 class="box-title" id="class_name"><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b>分面展示</h3>
+                <h3 class="box-title" id="class_name">
+                  <b ng-if="currentTopicName">{{currentTopicName + " - "}}</b>分面展示</h3>
               </div>
               <div id="facetClassDiv" class="box-body">
                 <ul class="list-group" style="display:block; overflow-y:auto; height:600px;padding: 0px;font-size: 20px">
@@ -255,19 +258,22 @@
                     <div class=" list-group-item firstlayer" style="background-color:#4682B4;" ng-style="updateFacetColor(firstLayerFacet.state);">
                       <a id={{firstLayerFacet.firstLayerFacetName}}_choose ng-click="clickChangeColor($event);getAssemblesByTopicNameAndFirstLayerFacetName(firstLayerFacet.topicName,firstLayerFacet.firstLayerFacetName);
                       post_log_of_mouseclick_facet('学习页面','点击-1级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);" ng-dblclick="isCollapsed =!isCollapsed;" style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
+                              ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,null,null);getAssemblesByDomainNameAndTopicNames(domainname,currentTopicName);" ng-dblclick="isCollapsed =!isCollapsed;"
+                        style="color:white;cursor:pointer">{{firstLayerFacet.firstLayerFacetName}}
                       </a>
-                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-fw fa-chevron-left" style="float:right;color:white;cursor:pointer"
-                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0">
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-right" style="float:right;color:white;cursor:pointer"
+                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0 || !isCollapsed">
+                      </a>
+                      <a id={{firstLayerFacet.firstLayerFacetName}}_a class="fa fa-chevron-down" style="float:right;color:white;cursor:pointer"
+                        ng-click="isCollapsed =!isCollapsed;" ng-hide="firstLayerFacet.secondLayerFacets.length==0 || isCollapsed">
                       </a>
                     </div>
-                    <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()" class="level2"
-                      ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets" style="margin-left: 40px;margin-bottom: 0px">
+                    <ul class="list-group" uib-collapse="isCollapsed" collapsed="coled()" collapsing="coling()" expanded="exped()" expanding="exping()"
+                      class="level2" ng-repeat="secondLayerFacet in firstLayerFacet.secondLayerFacets" style="margin-left: 40px;margin-bottom: 0px">
                       <div class="list-group-item " style="background-color: #3c8dbc;margin:2px 0;" ng-style="updateFacetColor(firstLayerFacet.state);">
                         <a id={{firstLayerFacet.firstLayerFacetName}}_{{secondLayerFacet.secondLayerFacetName}}_choose style="color:white;cursor:pointer"
                           ng-click="clickChangeColor($event);getAssemblesByTopicNameAndsecondLayerFacetName(secondLayerFacet.topicName,secondLayerFacet.secondLayerFacetName,firstLayerFacet.firstLayerFacetName);
-                          post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId
-                                  ,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);">
+                          post_log_of_mouseclick_facet('学习页面','点击-2级分面',firstLayerFacet.topicName,firstLayerFacet.topicId,firstLayerFacet.firstLayerFacetName,firstLayerFacet.firstLayerFacetId,secondLayerFacet.secondLayerFacetName,secondLayerFacet.secondLayerFacetId);getAssemblesByDomainNameAndTopicNames(domainname,currentTopicName);">
                           {{secondLayerFacet.secondLayerFacetName}}</a>
                       </div>
                     </ul>
@@ -290,8 +296,12 @@
                     </div>
                     <div>
                       <ul class="nav navbar-nav">
-                        <li ng-if="hasVideo"><a ng-click="changeAssemble('video')">视频</a></li>
-                        <li><a ng-click="changeAssemble('text')">富文本</a></li>
+                        <li>
+                          <a ng-click="changeAssemble('text')">富文本</a>
+                        </li>
+                        <li ng-if="hasVideo">
+                          <a ng-click="changeAssemble('video')">视频</a>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -313,8 +323,21 @@
                       &nbsp;&nbsp;&nbsp; 数据源:
                       <span class="badge bg-yellow">
                         <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
+                      </span>&nbsp;&nbsp;&nbsp;
+                      <span>
+                        <button id="e_{{ assemble.assembleId }}_positive" type="button" ng-class="assemble.evaluation == 1 ? 'is-active' : null" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_positive_s" style="display: inline-flex; align-items: center;">​
+                            <i id="e_{{ assemble.assembleId }}_positive_i" class="fa fa-thumbs-up"></i>
+                          </span>
+                          {{assemble.positive}}
+                        </button>
+                        <button id="e_{{ assemble.assembleId }}_negative" type="button" ng-class="assemble.evaluation == -1 ? 'is-active' : null" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_negative_s" style="display: inline-flex; align-items: center;">​
+                            <i id="e_{{ assemble.assembleId }}_negative_i" class="fa fa-thumbs-down"></i>
+                          </span>
+                          {{assemble.negative}}
+                        </button>
                       </span>
-
                     </small>
                   </h1>
                 </div>
@@ -326,7 +349,8 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer" style="text-align: center;">
-                  <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal" data-backdrop="static" data-keyboard="false" ng-click="videoOrNot(assemble.assembleText)">
+                  <button type="button" style="background: white;border: 0;" data-toggle="modal" data-target="#q_{{ assemble.assembleId }}_modal"
+                    data-backdrop="static" data-keyboard="false" ng-click="videoOrNot(assemble.assembleText)">
                     <i class="fa fa-fw fa-angle-double-down" ng-click="post_log_of_mouseclick_assemble('学习页面',assemble.topicName,assemble.topicId,
                     assemble.firstLayerFacetName,assemble.firstLayerFacetId,assemble.secondLayerFacetName,assemble.secondLayerFacetId,assemble.assembleId);"></i>
                   </button>
@@ -336,7 +360,10 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">
-                          <b ng-if="currentTopicName == null">{{domainname + " - "}}</b><b ng-if="currentTopicName">{{currentTopicName + " - "}}</b><b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b><b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
+                          <b ng-if="currentTopicName == null">{{domainname + " - "}}</b>
+                          <b ng-if="currentTopicName">{{currentTopicName + " - "}}</b>
+                          <b ng-if="currentFirstLayerFacetName">{{currentFirstLayerFacetName + " - "}}</b>
+                          <b ng-if="currentSecondLayerFacetName">{{currentSecondLayerFacetName + " - "}}</b>知识碎片
                           <small>
                             &nbsp;&nbsp;&nbsp; 数据源:
                             <span class="badge bg-yellow">
@@ -353,7 +380,22 @@
                         <video ng-src="{{trustSrc(videourl)}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(videourl)}}"></video>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" ng-click="pauseVideo();updateState();" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default pull-left" style="margin-right: 10px;" ng-click="pauseVideo();updateState();" data-dismiss="modal">关闭</button>
+
+
+                          <button id="e_{{ assemble.assembleId }}_positive_m" ng-class="assemble.evaluation == 1 ? 'is-active' : null" style="margin-right: 6px;" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                            <span id="e_{{ assemble.assembleId }}_positive_s_m" style="display: inline-flex; align-items: center;">​
+                              <i id="e_{{ assemble.assembleId }}_positive_i_m" class="fa fa-thumbs-up"></i>
+                            </span>
+                            {{assemble.positive}}
+                          </button>
+                          <button id="e_{{ assemble.assembleId }}_negative_m" ng-class="assemble.evaluation == -1 ? 'is-active' : null" type="button" class="Button VoteButton pull-left" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                            <span id="e_{{ assemble.assembleId }}_negative_s_m" style="display: inline-flex; align-items: center;">​
+                              <i id="e_{{ assemble.assembleId }}_negative_i_m" class="fa fa-thumbs-down"></i>
+                            </span>
+                            {{assemble.negative}}
+                          </button>
+
                       </div>
                     </div>
                     <!-- /.modal-content -->
@@ -364,28 +406,42 @@
               </div>
 
               <div ng-if="showVideo" class="box box-solid" ng-repeat="assemble in assembles" style="margin-bottom: 10px;">
+                <!-- 碎片的主题、分面和数据源信息 -->
+                <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
                   <!-- 碎片的主题、分面和数据源信息 -->
-                  <div class="box-header with-border" id="q_{{ assemble.assembleId }}">
-                    <!-- 碎片的主题、分面和数据源信息 -->
-                    <h1 class="box-title">
-                      <small>
-                        分面:
-                        <span class="badge bg-purple">
-                          <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
-                        </span>
-                        &nbsp;&nbsp;&nbsp; 数据源:
-                        <span class="badge bg-yellow">
-                          <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
-                        </span>
-  
-                      </small>
-                    </h1>
-                  </div>
-                  <div class="box-body" style="width: 50%; overflow: hidden;margin: auto;" >
-                      <video ng-src="{{trustSrc(extractVideoUrl(assemble.assembleText))}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(extractVideoUrl(assemble.assembleText))}}"></video>
-                  </div>
-                  <!-- /.box-body -->
+                  <h1 class="box-title">
+                    <small>
+                      分面:
+                      <span class="badge bg-purple">
+                        <a style="color: white" target="_blank">{{ assemble.firstLayerFacetName }}</a>
+                      </span>
+                      &nbsp;&nbsp;&nbsp; 数据源:
+                      <span class="badge bg-yellow">
+                        <a style="color: white" target="_blank">{{ assemble.sourceName }}</a>
+                      </span>&nbsp;&nbsp;&nbsp;
+                      <span>
+                        <button id="e_{{ assemble.assembleId }}_positive" ng-class="assemble.evaluation == 1 ? 'is-active' : null" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, 1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_positive_s" style="display: inline-flex; align-items: center;">​
+                            <i id="e_{{ assemble.assembleId }}_positive_i" class="fa fa-thumbs-up"></i>
+                          </span>
+                          {{assemble.positive}}
+                        </button>
+                        <button id="e_{{ assemble.assembleId }}_negative" ng-class="assemble.evaluation == -1 ? 'is-active' : null" type="button" class="Button VoteButton" ng-click="saveAssembleEvaluation(assemble, -1 , $event);">
+                          <span id="e_{{ assemble.assembleId }}_negative_s" style="display: inline-flex; align-items: center;">​
+                            <i id="e_{{ assemble.assembleId }}_negative_i" class="fa fa-thumbs-down"></i>
+                          </span>
+                          {{assemble.negative}}
+                        </button>
+                      </span>
+
+                    </small>
+                  </h1>
                 </div>
+                <div class="box-body" style="width: 50%; overflow: hidden;margin: auto;">
+                  <video ng-src="{{trustSrc(extractVideoUrl(assemble.assembleText))}}" style="width: 100%" controls="controls" poster="{{generateCaptureUrl(extractVideoUrl(assemble.assembleText))}}"></video>
+                </div>
+                <!-- /.box-body -->
+              </div>
             </div>
 
           </div>

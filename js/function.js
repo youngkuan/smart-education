@@ -238,11 +238,12 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
     $scope.getAssemblesByDomainNameAndTopicNames = function (domainName, topicNames) {
 
         $http({
-            url: ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNames",
+            url: ip_yotta + "/assemble/getAssemblesByDomainNameAndTopicNamesAndUserId",
             method: 'post',
             params: {
                 domainName: domainName,
-                topicNames: topicNames
+                topicNames: topicNames,
+                userId: studentCode
             }
         }).success(function (response) {
             assembles = response.data;
@@ -261,7 +262,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         }).error(function (response) {
             console.log('获取主题出错...');
         });
-    }
+    };
 
     /**
      * 点击某一推荐主题，查询分面
@@ -670,7 +671,7 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
                         break;
                     }
             });
-            $("#"+id).parent().css('background-color','blue');
+            // $("#"+id).parent().css('background-color','blue');
             $(document.getElementById(id)).parent().css('background-color','blue');
             // console.log(response);
             // console.log($scope.clickfacets);
@@ -682,6 +683,51 @@ app.controller('yangkuanController', function ($scope, $http, $sce) {
         var tag = url.split('_')[0].split('/').pop();
         return url.split(tag)[0] + 'thumb/' + tag + '.jpg';
     };
+
+    // set assemble evaluation
+    $scope.saveAssembleEvaluation = function(assemble,value,event){
+        $http({
+            url: ip_yotta + "/evaluation/saveAssembleEvaluation",
+            method: 'get',
+            params:{
+                userId: studentCode,
+                assembleId: assemble.assembleId,
+                value: value
+            }
+        }).success(function(response){
+            console.log(response.msg + " " + response.data);
+            // console.log(event);
+            var id = event.target.getAttribute("id").split('_')[1];
+            // console.log(id);
+
+            if(value == 1){
+                $('#e_' + id + '_negative_m').removeClass('is-active');
+                $('#e_' + id + '_positive_m').addClass('is-active');
+                $('#e_' + id + '_negative').removeClass('is-active');
+                $('#e_' + id + '_positive').addClass('is-active');
+            }else{
+                $('#e_' + id + '_negative_m').addClass('is-active');
+                $('#e_' + id + '_positive_m').removeClass('is-active');
+                $('#e_' + id + '_negative').addClass('is-active');
+                $('#e_' + id + '_positive').removeClass('is-active');
+            }
+
+            $http({
+                url: ip_yotta + '/evaluation/getAssembleEvaluationStatistics',
+                method: 'get',
+                params: {
+                    assembleId: assemble.assembleId
+                }
+            }).success(function(response){
+                assemble.positive = response.data.positiveCnt;
+                assemble.negative = response.data.negativeCnt;
+            })
+
+        }).error(function(response){
+            console.log(response);
+        });
+    };
+
     //angular end
 });
 
